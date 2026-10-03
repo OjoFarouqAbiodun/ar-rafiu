@@ -1,0 +1,53 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import DetailBody from '../../components/DetailBody.astro';
+import ContactCtaSection from '../../components/home/ContactCtaSection.astro';
+import { services, type Service } from '../../data/services';
+
+/**
+ * Service detail page — PRD section 9.3 and phase 4, and the second step of the
+ * core journey in PRD section 10.
+ *
+ * Services carry no parent grouping in `services.ts`, so no category context is
+ * passed. Inventing one to match the product pages would be a claim about how the
+ * company organises its work, which it has not supplied.
+ *
+ * As with products, only `getStaticPaths` entries are emitted, so an unknown slug
+ * produces no file and the host serves the 404 page.
+ */
+
+export const getStaticPaths = (() =>
+  services.map((service) => ({
+    params: { service: service.id },
+    props: { service },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+
+const description = `${service.name} from Ar-Rafiu Integrated Services Limited. ${service.description}`;
+---
+
+<BaseLayout title={service.name} description={description}>
+  <PageHeader eyebrow="Service" title={service.name} intro={service.description} />
+
+  <section class="page-section" aria-label={`${service.name} details`}>
+    <div class="container">
+      <DetailBody
+        name={service.name}
+        features={service.features}
+        useCases={service.useCases}
+        enquiry={{ Service: service.name }}
+        backHref="/services"
+        backLabel="All services"
+      />
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>

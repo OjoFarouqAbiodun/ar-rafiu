@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import DetailBody from '../../components/DetailBody.astro';
+import ContactCtaSection from '../../components/home/ContactCtaSection.astro';
+import { equipmentEntries, type EquipmentEntry } from '../../data/equipment';
+
+/**
+ * Product detail page — PRD section 9.4 and the second step of the core journey in
+ * PRD section 10.
+ *
+ * A category with no confirmed specifications still gets a real page rather than
+ * being folded back into the listing, because the enquiry is the point: a visitor
+ * who has decided they want CCTV systems needs a page they can send to WhatsApp
+ * from, and the message needs to name the item.
+ *
+ * Only `getStaticPaths` entries are emitted, so an unknown slug produces no file
+ * and the host serves the 404 page rather than an empty shell.
+ */
+
+export const getStaticPaths = (() =>
+  equipmentEntries.map((entry) => ({
+    params: { category: entry.id },
+    props: { entry },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  entry: EquipmentEntry;
+}
+
+const { entry } = Astro.props;
+
+const description = `${entry.name} supplied by Ar-Rafiu Integrated Services Limited. ${entry.description}`;
+---
+
+<BaseLayout title={entry.name} description={description}>
+  <PageHeader eyebrow="Product" title={entry.name} intro={entry.description} />
+
+  <section class="page-section" aria-label={`${entry.name} details`}>
+    <div class="container">
+      <DetailBody
+        name={entry.name}
+        context={{ label: entry.groupTitle, description: entry.groupDescription }}
+        image={entry.image}
+        features={entry.features}
+        useCases={entry.useCases}
+        enquiry={{ Product: entry.name }}
+        backHref="/products"
+        backLabel="All products"
+      />
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>

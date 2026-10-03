@@ -1,0 +1,224 @@
+---
+import EnquiryLink from './EnquiryLink.astro';
+import ActionLink from './ActionLink.astro';
+import PlaceholderMedia from './PlaceholderMedia.astro';
+
+/**
+ * The body shared by every product and service detail page.
+ *
+ * One component rather than two because both page types need the same six blocks
+ * in the same order, and duplicating the markup *and* the styles for them is the
+ * kind of repetition FRONTEND-CORE-RULES section 21 warns about. The route files
+ * keep ownership of everything that genuinely differs: the heading, the metadata
+ * and, for products, the parent category.
+ *
+ * `features` and `useCases` render only when they hold data. PRD section 9.4 asks
+ * for both, but section 24 forbids inventing specifications, so an absent list
+ * produces no heading and no empty panel — it produces a single honest note
+ * instead. When the company supplies real values the sections appear with no
+ * change to this component or to either route.
+ */
+
+interface DetailContext {
+  label: string;
+  description: string;
+}
+
+interface Props {
+  /** Item name, used for the media label and the enquiry wording. */
+  name: string;
+  /** Parent category. Products pass their group; services have none to pass. */
+  context?: DetailContext;
+  /** Set once official photography exists (PRD section 27.10). */
+  image?: string;
+  features?: readonly string[];
+  useCases?: readonly string[];
+  /** Labelled detail lines for the WhatsApp message, e.g. `{ Product: name }`. */
+  enquiry: Record<string, string>;
+  backHref: string;
+  backLabel: string;
+}
+
+const {
+  name,
+  context,
+  image,
+  features = [],
+  useCases = [],
+  enquiry,
+  backHref,
+  backLabel,
+} = Astro.props;
+
+const hasContext = Boolean(context);
+const hasFeatures = features.length > 0;
+const hasUseCases = useCases.length > 0;
+const hasDetailData = hasFeatures || hasUseCases;
+---
+
+<div class="detail">
+  {
+    hasContext && context && (
+      <section class="detail__context" aria-labelledby="detail-context-title">
+        <h2 class="detail__context-title" id="detail-context-title">{context.label}</h2>
+        <p class="detail__context-text">{context.description}</p>
+      </section>
+    )
+  }
+
+  <div class="detail__media">
+    {
+      image ? (
+        <img
+          class="detail__image"
+          src={image}
+          alt={name}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <PlaceholderMedia label={name} ratio="4 / 3" />
+      )
+    }
+  </div>
+
+  {
+    hasFeatures && (
+      <section class="detail__section" aria-labelledby="detail-features-title">
+        <h2 class="detail__section-title" id="detail-features-title">What this covers</h2>
+        <ul class="detail__list">
+          {features.map((feature) => (
+            <li>{feature}</li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    hasUseCases && (
+      <section class="detail__section" aria-labelledby="detail-usecases-title">
+        <h2 class="detail__section-title" id="detail-usecases-title">Where it is used</h2>
+        <ul class="detail__list">
+          {useCases.map((useCase) => (
+            <li>{useCase}</li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    !hasDetailData && (
+      <p class="detail__pending">
+        Further details about this item, including specifications and current
+        availability, have not been supplied by the company and are therefore not
+        listed here. Enquire to ask what is currently available.
+      </p>
+    )
+  }
+
+  <section class="detail__enquiry" aria-labelledby="detail-enquiry-title">
+    <h2 class="detail__section-title" id="detail-enquiry-title">Enquire about {name}</h2>
+    <p class="detail__enquiry-text">
+      WhatsApp opens with a message that already names this item, so you do not have to
+      describe it from scratch.
+    </p>
+    <p class="detail__enquiry-action">
+      <EnquiryLink details={enquiry} variant="primary">
+        Enquire on WhatsApp
+      </EnquiryLink>
+    </p>
+  </section>
+
+  <p class="detail__back">
+    <ActionLink href={backHref} variant="quiet">{backLabel}</ActionLink>
+  </p>
+</div>
+
+<style>
+  .detail {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  /* Matches the interior-page rhythm: the catalogue and service lists already
+     separate entries with a single hairline, so the detail page keeps that
+     language rather than introducing a second one. */
+  .detail__context,
+  .detail__section,
+  .detail__enquiry {
+    padding-block-start: var(--space-lg);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .detail__context-title,
+  .detail__section-title {
+    font-size: var(--step-2);
+    letter-spacing: -0.015em;
+  }
+
+  .detail__context-text {
+    margin-block-start: var(--space-2xs);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  .detail__media {
+    max-width: 42rem;
+  }
+
+  /* Reserved box so a future official photograph cannot shift the page, and
+     `object-fit` so an image whose proportions differ from the slot is cropped
+     rather than stretched (PRD section 27.7). */
+  .detail__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-muted);
+  }
+
+  .detail__list {
+    display: grid;
+    gap: var(--space-2xs);
+    margin-block-start: var(--space-sm);
+    max-width: var(--measure);
+    list-style: disc;
+    padding-inline-start: var(--space-md);
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  /* Same weight of statement as the About page's note about unconfirmed company
+     information, and worded so it cannot be read as an Ar-Rafiu claim. */
+  .detail__pending {
+    max-width: var(--measure);
+    color: var(--color-text-subtle);
+    font-size: var(--step--1);
+  }
+
+  .detail__enquiry-text {
+    margin-block-start: var(--space-2xs);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  .detail__enquiry-action {
+    margin-block-start: var(--space-md);
+  }
+
+  .detail__back {
+    padding-block-start: var(--space-2xs);
+  }
+
+  @media (min-width: 64rem) {
+    .detail__media {
+      max-width: 48rem;
+    }
+  }
+</style>

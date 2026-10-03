@@ -4,10 +4,15 @@ import { equipmentGroups } from '../data/equipment';
 /**
  * The equipment catalogue, shared by the homepage section and the products page.
  *
- * Rendered as a description list rather than cards: eleven product lines as
- * eleven boxes becomes an undifferentiated wall, whereas term/description pairs
+ * Rendered as a description list rather than cards: ten product lines as ten
+ * boxes becomes an undifferentiated wall, whereas term/description pairs
  * stay readable as a reference. Category names and one-line purposes are the
  * only claims made, since no specifications have been supplied (PRD section 24).
+ *
+ * Each term links to its detail page (PRD section 9.4). The link lives on the
+ * term rather than on a trailing "read more", because the term is what a visitor
+ * is scanning for and a repeated action label would add noise without adding a
+ * destination.
  */
 ---
 
@@ -22,7 +27,9 @@ import { equipmentGroups } from '../data/equipment';
         <dl class="group__categories">
           {group.categories.map((category) => (
             <div class="category">
-              <dt class="category__name">{category.name}</dt>
+              <dt>
+                <a class="category__link" href={`/products/${category.id}`}>{category.name}</a>
+              </dt>
               <dd class="category__detail">{category.description}</dd>
             </div>
           ))}
@@ -66,9 +73,26 @@ import { equipmentGroups } from '../data/equipment';
     gap: var(--space-3xs);
   }
 
-  .category__name {
-    font-weight: var(--weight-semibold);
+  .category__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
     color: var(--color-primary);
+    font-weight: var(--weight-semibold);
+    /* The underline colour carries the affordance instead of the text colour, so
+       a ten-item reference list stays readable while still reading as links.
+       Same treatment as the footer links. */
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 0.2em;
+    transition-property: color, text-decoration-color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .category__link:hover {
+    color: var(--color-primary-hover);
+    text-decoration-color: currentColor;
   }
 
   .category__detail {
