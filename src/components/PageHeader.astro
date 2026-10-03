@@ -1,0 +1,50 @@
+---
+/**
+ * Shared interior-page header. Keeps the eyebrow, title and introduction pattern
+ * identical across products, services, about, contact and the 404 page.
+ */
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro: string;
+}
+
+const { eyebrow, title, intro } = Astro.props;
+---
+
+<header class="page-header">
+  <div class="container">
+    <p class="page-header__eyebrow">{eyebrow}</p>
+    <h1 class="page-header__title">{title}</h1>
+    <p class="page-header__intro">{intro}</p>
+  </div>
+</header>
+
+<style>
+  .page-header {
+    padding-block: var(--space-xl) var(--space-lg);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .page-header__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .page-header__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-4);
+  }
+
+  .page-header__intro {
+    margin-block-start: var(--space-sm);
+    max-width: var(--measure);
+    font-size: var(--step-1);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,142 @@
+---
+import EnquiryLink from '../EnquiryLink.astro';
+import { company, placeholderContactDetails } from '../../data/company';
+
+/**
+ * Closing enquiry prompt.
+ *
+ * WhatsApp is the primary route (PRD section 11), so it carries the only filled
+ * accent control on a light background. Phone and email remain visible as
+ * alternatives, per PRD section 30's requirement that other contact information
+ * stays available.
+ */
+
+const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
+const hasPlaceholders = placeholderContactDetails.length > 0;
+---
+
+<section class="closing" aria-labelledby="closing-title">
+  <div class="container closing__inner">
+    <div class="closing__lead">
+      <p class="closing__eyebrow">Next step</p>
+      <h2 class="closing__title" id="closing-title">Start an enquiry</h2>
+      <p class="closing__text">
+        Describe the equipment, service or fault you need help with, and include any
+        details you already have. Enquiries are handled through the company WhatsApp
+        contact.
+      </p>
+    </div>
+
+    <div class="closing__actions">
+      <EnquiryLink details={{ Interest: 'General enquiry' }} variant="accent">
+        Enquire on WhatsApp
+      </EnquiryLink>
+
+      <ul class="closing__alternatives">
+        <li>
+          <span class="closing__label">Phone</span>
+          <a href={phoneHref}>{company.contact.phone}</a>
+        </li>
+        <li>
+          <span class="closing__label">Email</span>
+          <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+        </li>
+      </ul>
+
+      {
+        hasPlaceholders && (
+          <p class="closing__note">
+            Contact details are development placeholders pending confirmation by the
+            company.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing {
+    padding-block: var(--space-3xl);
+    background-color: var(--color-bg);
+  }
+
+  .closing__inner {
+    display: grid;
+    gap: var(--space-lg);
+    padding-block-start: var(--space-lg);
+    border-block-start: 2px solid var(--color-accent);
+  }
+
+  .closing__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .closing__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-4);
+  }
+
+  .closing__text {
+    margin-block-start: var(--space-sm);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+
+  .closing__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .closing__alternatives {
+    display: grid;
+    gap: var(--space-2xs);
+    width: 100%;
+  }
+
+  .closing__alternatives li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-sm);
+    min-height: var(--touch-target);
+    padding-block: var(--space-2xs);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .closing__label {
+    min-width: 4.5rem;
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .closing__alternatives a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    color: var(--color-primary);
+  }
+
+  .closing__note {
+    font-size: var(--step--1);
+    color: var(--color-text-subtle);
+    max-width: 44ch;
+  }
+
+  @media (min-width: 64rem) {
+    .closing__inner {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+  }
+</style>

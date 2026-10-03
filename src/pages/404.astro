@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
+import { primaryNavigation } from '../data/navigation';
+import { company } from '../data/company';
+
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you were looking for could not be found on the Ar-Rafiu Integrated Services Limited website."
+>
+  <PageHeader
+    eyebrow="Error 404"
+    title="Page not found"
+    intro="The page you were looking for is not here. It may have been moved, or the link may be incorrect."
+  />
+
+  <section class="page-section" aria-label="Suggested pages">
+    <div class="container not-found">
+      <nav class="not-found__nav" aria-label="Suggested pages">
+        <h2 class="not-found__heading">Try one of these</h2>
+        <ul class="not-found__list">
+          {
+            primaryNavigation.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="not-found__contact">
+        <h2 class="not-found__heading">Looking for something specific?</h2>
+        <p class="not-found__text">
+          Send an enquiry to {company.tradingName} and include the equipment, service
+          or detail you need.
+        </p>
+        <a class="not-found__link" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+          Enquire on WhatsApp
+          <span class="visually-hidden">(opens WhatsApp)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .not-found__heading {
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+  }
+
+  .not-found__list {
+    margin-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .not-found__list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--touch-target);
+    border-block-end: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+  }
+
+  .not-found__list a::after {
+    content: '\2192';
+    color: var(--color-accent);
+  }
+
+  .not-found__list a:hover {
+    color: var(--color-primary);
+  }
+
+  .not-found__text {
+    margin-block-start: var(--space-2xs);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    margin-block-start: var(--space-md);
+    padding: var(--space-2xs) var(--space-md);
+    min-height: var(--touch-target);
+    background-color: var(--color-accent-strong);
+    border: 1px solid var(--color-accent-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-inverse);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+  }
+
+  .not-found__link:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
+
+  @media (min-width: 48rem) {
+    .not-found {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

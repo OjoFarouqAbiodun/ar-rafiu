@@ -1,0 +1,240 @@
+---
+import EnquiryLink from './EnquiryLink.astro';
+import { primaryNavigation } from '../data/navigation';
+import { company } from '../data/company';
+
+/**
+ * Sticky site header.
+ *
+ * The surface stays near-white rather than navy because the supplied logo
+ * artwork is navy and red; a navy header would render its navy elements
+ * invisible. That constraint drives the header treatment.
+ */
+
+const currentPath = Astro.url.pathname;
+
+function isCurrent(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+}
+---
+
+<header class="site-header" data-site-header data-nav-ready="false">
+  <div class="site-header__inner container">
+    <a class="site-header__brand" href="/">
+      <img
+        src="/assets/brand/logo.svg"
+        alt={company.legalName}
+        width="1412"
+        height="256"
+      />
+    </a>
+
+    <button
+      class="site-header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+    >
+      <span class="visually-hidden">Menu</span>
+      <svg
+        class="site-header__icon site-header__icon--open"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M3 6h18"></path>
+        <path d="M3 12h18"></path>
+        <path d="M3 18h18"></path>
+      </svg>
+      <svg
+        class="site-header__icon site-header__icon--close"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M5 5l14 14"></path>
+        <path d="M19 5L5 19"></path>
+      </svg>
+    </button>
+
+    <nav class="site-nav" id="primary-navigation" aria-label="Primary">
+      <ul class="site-nav__list">
+        {
+          primaryNavigation.map((item) => (
+            <li>
+              <a
+                class="site-nav__link"
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="site-nav__enquiry">
+        <EnquiryLink details={{ Interest: 'General enquiry' }} variant="primary">
+          Enquire on WhatsApp
+        </EnquiryLink>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: 4.5rem;
+  }
+
+  .site-header__brand {
+    display: block;
+    margin-inline-end: auto;
+    padding-block: var(--space-2xs);
+  }
+
+  .site-header__brand img {
+    /* Height-driven so the 5.52:1 artwork keeps its proportions at any
+       header size without a separate width rule. */
+    width: auto;
+    height: 1.75rem;
+  }
+
+  /* Hidden until the script marks the header ready. Without JavaScript the
+     navigation stays expanded, so a toggle that cannot work should not be
+     shown. */
+  .site-header__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    padding: 0;
+    background-color: transparent;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+  }
+
+  .site-header__icon--close,
+  .site-header__toggle[aria-expanded='true'] .site-header__icon--open {
+    display: none;
+  }
+
+  .site-header__toggle[aria-expanded='true'] .site-header__icon--close {
+    display: block;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0;
+  }
+
+  .site-nav__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    padding-inline: var(--space-2xs);
+    color: var(--color-text-muted);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition-property: color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .site-nav__link:hover {
+    color: var(--color-primary);
+  }
+
+  /* The current page is marked with weight and colour together rather than
+     colour alone. */
+  .site-nav__link[aria-current='page'] {
+    color: var(--color-primary);
+    font-weight: var(--weight-semibold);
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+  }
+
+  /* Below the navigation breakpoint the panel is collapsed, but only once the
+     script has marked the header as ready. Without JavaScript the list stays
+     visible and stacked, so navigation never depends on scripting. */
+  @media (max-width: 47.9375rem) {
+    .site-header__inner {
+      padding-block: var(--space-2xs);
+    }
+
+    [data-nav-ready='true'] .site-header__toggle {
+      display: inline-flex;
+    }
+
+    [data-nav-ready='true'] .site-nav {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-2xs);
+      padding-block: var(--space-sm) var(--space-md);
+    }
+
+    [data-nav-ready='true'] .site-nav[data-open='true'] {
+      display: flex;
+    }
+
+    [data-nav-ready='true'] .site-nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    [data-nav-ready='true'] .site-nav__link {
+      padding-block: var(--space-2xs);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-nav-ready='true'] .site-nav__link[aria-current='page'] {
+      box-shadow: none;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .site-header__inner {
+      min-height: 5rem;
+    }
+
+    .site-header__brand img {
+      height: 2rem;
+    }
+  }
+</style>

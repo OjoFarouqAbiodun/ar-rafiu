@@ -1,0 +1,100 @@
+---
+import { buildEnquiryMessage, buildWhatsAppLink } from '../../lib/whatsapp';
+import { enquiryTopics } from '../../data/enquiry';
+
+/**
+ * The hero's enquiry shortcuts.
+ *
+ * Uses the WhatsApp helpers directly rather than `EnquiryLink` because these
+ * are quiet text links in a list, not buttons, and they need their own row
+ * layout. The message and number still come from the shared helpers, so there
+ * remains a single place to change either.
+ */
+
+const topics = enquiryTopics.map((topic) => ({
+  ...topic,
+  href: buildWhatsAppLink(buildEnquiryMessage({ Interest: topic.interest })),
+}));
+---
+
+<aside class="topics" aria-labelledby="topics-title">
+  <h2 class="topics__title" id="topics-title">Start an enquiry</h2>
+  <p class="topics__hint">
+    Pick the area closest to your need. WhatsApp opens with the subject already
+    filled in.
+  </p>
+
+  <ul class="topics__list">
+    {
+      topics.map((topic) => (
+        <li class="topics__item">
+          <a class="topics__link" href={topic.href} target="_blank" rel="noopener noreferrer">
+            {topic.label}
+            <span class="visually-hidden">(opens WhatsApp)</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<style>
+  .topics {
+    padding: var(--space-md);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-block-start: 3px solid var(--color-accent);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+  }
+
+  .topics__title {
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+  }
+
+  .topics__hint {
+    margin-block-start: var(--space-2xs);
+    max-width: 40ch;
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+
+  .topics__list {
+    margin-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .topics__item {
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .topics__item:last-child {
+    border-block-end: 0;
+  }
+
+  .topics__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    min-height: var(--touch-target);
+    padding-block: var(--space-2xs);
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition-property: color, padding-inline-start;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .topics__link::after {
+    content: '\2192';
+    color: var(--color-accent);
+    font-weight: var(--weight-semibold);
+  }
+
+  .topics__link:hover {
+    padding-inline-start: var(--space-2xs);
+    color: var(--color-primary);
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import ServiceList from '../ServiceList.astro';
+import ActionLink from '../ActionLink.astro';
+---
+
+<section class="services" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="services__head">
+      <div>
+        <p class="services__eyebrow">What we do</p>
+        <h2 class="services__title" id="services-title">Services</h2>
+      </div>
+      <p class="services__intro">
+        Installation and support cover the equipment listed above as well as
+        equipment already in use.
+      </p>
+    </div>
+
+    <ServiceList />
+
+    <p class="services__actions">
+      <ActionLink href="/services" variant="secondary">Read about services</ActionLink>
+    </p>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding-block: var(--space-3xl);
+    background-color: var(--color-bg);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .services__head {
+    display: grid;
+    gap: var(--space-sm);
+    margin-block-end: var(--space-xl);
+  }
+
+  .services__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .services__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-4);
+  }
+
+  .services__intro {
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+
+  .services__actions {
+    margin-block-start: var(--space-lg);
+  }
+
+  @media (min-width: 64rem) {
+    .services__head {
+      /* Heading and supporting line sit apart so the section opens with a wide
+         left edge rather than a centred title. */
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: end;
+    }
+
+    .services__intro {
+      justify-self: end;
+    }
+  }
+</style>

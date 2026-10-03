@@ -1,0 +1,35 @@
+---
+import ActionLink from './ActionLink.astro';
+import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
+
+/**
+ * WhatsApp enquiry call to action.
+ *
+ * This component owns the enquiry URL so that no page has to know how the
+ * message is assembled or which number is configured (PRD section 11). Callers
+ * only supply the enquiry details, for example `{ Product: 'CCTV systems' }`.
+ */
+
+type ActionVariant = 'primary' | 'accent' | 'secondary' | 'quiet';
+
+interface Props {
+  details: Record<string, string>;
+  variant?: ActionVariant;
+  externalLabel?: string;
+  class?: string;
+}
+
+const { details, variant = 'primary', externalLabel, class: className } = Astro.props;
+
+const href = buildWhatsAppLink(buildEnquiryMessage(details));
+---
+
+<ActionLink
+  href={href}
+  variant={variant}
+  external
+  externalLabel={externalLabel ?? '(opens WhatsApp)'}
+  class={className}
+>
+  <slot>Enquire on WhatsApp</slot>
+</ActionLink>

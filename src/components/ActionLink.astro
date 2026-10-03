@@ -1,0 +1,128 @@
+---
+/**
+ * The single interactive control used across the site.
+ *
+ * FRONTEND-CORE-RULES section 10 requires distinct action hierarchy rather than
+ * one button treatment everywhere, so variants map to roles: `primary` for the
+ * main action on a light surface, `accent` for a filled red control, `secondary`
+ * for a supporting action, and `quiet` for tertiary links that should not
+ * compete with a button.
+ */
+
+type ActionVariant = 'primary' | 'accent' | 'secondary' | 'quiet';
+
+interface Props {
+  href: string;
+  variant?: ActionVariant;
+  /** Opens in a new tab with `rel="noopener"`. Use for links that leave the site. */
+  external?: boolean;
+  /** Screen-reader suffix announced when the link opens elsewhere. */
+  externalLabel?: string;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  external = false,
+  externalLabel = '(opens in a new tab)',
+  class: className,
+} = Astro.props;
+---
+
+<a
+  class:list={['action', `action--${variant}`, className]}
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+>
+  <slot />
+  {external && <span class="visually-hidden"> {externalLabel}</span>}
+</a>
+
+<style>
+  .action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-height: var(--touch-target);
+    padding: var(--space-2xs) var(--space-md);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    font-weight: var(--weight-semibold);
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .action--primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  .action--primary:hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+  }
+
+  .action--primary:active {
+    background-color: var(--color-primary-active);
+    border-color: var(--color-primary-active);
+  }
+
+  /* The brand red measures 4.09:1 on white, so a filled red control uses
+     --red-600 at 6.43:1 to keep white label text above AA. */
+  .action--accent {
+    background-color: var(--color-accent-strong);
+    border-color: var(--color-accent-strong);
+    color: var(--color-text-inverse);
+  }
+
+  .action--accent:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
+
+  .action--accent:active {
+    background-color: var(--red-800);
+    border-color: var(--red-800);
+  }
+
+  .action--secondary {
+    background-color: transparent;
+    border-color: var(--color-border-strong);
+    color: var(--color-primary);
+  }
+
+  .action--secondary:hover {
+    background-color: var(--color-primary-subtle);
+    border-color: var(--color-primary);
+  }
+
+  .action--secondary:active {
+    background-color: var(--navy-200);
+  }
+
+  .action--quiet {
+    min-height: auto;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    color: var(--color-primary);
+    font-weight: var(--weight-medium);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .action--quiet:hover {
+    color: var(--color-primary-hover);
+  }
+</style>

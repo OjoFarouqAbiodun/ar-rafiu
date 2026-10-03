@@ -1,0 +1,99 @@
+---
+/**
+ * Deliberate stand-in for imagery that does not exist yet.
+ *
+ * PRD section 27 forbids passing off stock or generated imagery as Ar-Rafiu's
+ * own office, staff, installations or stock, and PRD section 30 asks for an
+ * intentional fallback rather than a broken image. This component therefore
+ * shows a labelled placeholder that is obviously a placeholder, and reserves the
+ * aspect ratio up front so swapping in approved photography later does not shift
+ * layout (PRD section 19).
+ */
+
+interface Props {
+  /** What the future image will depict, e.g. "Server infrastructure". */
+  label: string;
+  /** CSS aspect-ratio value. Reserves space to avoid layout shift. */
+  ratio?: string;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { label, ratio = '4 / 5', tone = 'light', class: className } = Astro.props;
+---
+
+<div
+  class:list={['placeholder', `placeholder--${tone}`, className]}
+  style={`--placeholder-ratio: ${ratio};`}
+  role="img"
+  aria-label={`Placeholder for ${label}. Official imagery pending.`}
+>
+  <p class="placeholder__label">{label}</p>
+  <p class="placeholder__note">Imagery pending</p>
+</div>
+
+<style>
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    aspect-ratio: var(--placeholder-ratio);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  /* Diagonal hairlines read as "awaiting artwork" without resembling a photo. */
+  .placeholder--light {
+    background-color: var(--color-surface-subtle);
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--navy-100) 0 1px,
+      transparent 1px 10px
+    );
+  }
+
+  .placeholder--dark {
+    border-color: rgb(255 255 255 / 0.18);
+    background-color: rgb(255 255 255 / 0.04);
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgb(255 255 255 / 0.07) 0 1px,
+      transparent 1px 10px
+    );
+  }
+
+  .placeholder__label {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    text-wrap: balance;
+  }
+
+  .placeholder__note {
+    font-size: var(--step--1);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .placeholder--light .placeholder__label {
+    color: var(--color-primary);
+  }
+
+  .placeholder--light .placeholder__note {
+    color: var(--color-text-subtle);
+  }
+
+  .placeholder--dark .placeholder__label {
+    color: var(--color-text-inverse);
+  }
+
+  .placeholder--dark .placeholder__note {
+    color: var(--color-text-inverse-muted);
+  }
+</style>

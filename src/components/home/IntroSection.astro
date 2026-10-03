@@ -1,0 +1,97 @@
+---
+import ActionLink from '../ActionLink.astro';
+import EnquiryLink from '../EnquiryLink.astro';
+import EnquiryTopics from './EnquiryTopics.astro';
+
+/**
+ * Opening statement.
+ *
+ * Deliberately not centred. FRONTEND-CORE-RULES section 1 lists the generic
+ * centred hero as a pattern to avoid, and the enquiry panel beside the copy earns
+ * its space by removing a step from the primary user action rather than by
+ * carrying decoration.
+ */
+---
+
+<section class="intro" aria-labelledby="intro-title">
+  <div class="container intro__inner">
+    <div class="intro__lead">
+      <p class="intro__eyebrow">IT equipment &amp; technology solutions</p>
+
+      <h1 class="intro__title" id="intro-title">
+        IT equipment, technology solutions and technical support
+      </h1>
+
+      <p class="intro__text">
+        Ar-Rafiu Integrated Services Limited supplies and supports the equipment
+        organisations depend on: servers and server racks, computers, printers and
+        photocopiers, CCTV and biometric access systems, inverters and batteries.
+        Installation, maintenance, repair and replacement are handled as part of the
+        same relationship.
+      </p>
+
+      <div class="intro__actions">
+        <EnquiryLink details={{ Interest: 'General enquiry' }} variant="primary">
+          Enquire on WhatsApp
+        </EnquiryLink>
+        <ActionLink href="#equipment" variant="secondary">See what we supply</ActionLink>
+      </div>
+    </div>
+
+    <EnquiryTopics />
+  </div>
+</section>
+
+<style>
+  .intro {
+    padding-block: var(--space-2xl) var(--space-3xl);
+    background-color: var(--color-bg);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .intro__inner {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .intro__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .intro__title {
+    margin-block: var(--space-sm) 0;
+    font-size: var(--step-5);
+    max-width: 20ch;
+  }
+
+  .intro__text {
+    margin-block-start: var(--space-md);
+    max-width: var(--measure);
+    font-size: var(--step-1);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+
+  .intro__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-lg);
+  }
+
+  @media (min-width: 64rem) {
+    .intro__inner {
+      /* Asymmetric so the enquiry panel reads as a distinct next step rather
+         than a third column of a symmetrical hero. */
+      grid-template-columns: 1.45fr 1fr;
+      gap: var(--space-2xl);
+      padding-block: var(--space-lg);
+    }
+  }
+</style>

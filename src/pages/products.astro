@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import EquipmentCatalogue from '../components/EquipmentCatalogue.astro';
+import ContactCtaSection from '../components/home/ContactCtaSection.astro';
+---
+
+<BaseLayout
+  title="Products"
+  description="IT equipment and technology supplied by Ar-Rafiu Integrated Services Limited, including servers, server racks, computers, printers, photocopiers, CCTV, biometric systems, inverters and batteries."
+>
+  <PageHeader
+    eyebrow="Catalogue"
+    title="Products and equipment"
+    intro="The equipment areas Ar-Rafiu supplies. Availability and specification for any item can be confirmed through an enquiry."
+  />
+
+  <section class="page-section page-section--subtle" aria-label="Product catalogue">
+    <div class="container">
+      <h2 class="page-section__title">Equipment categories</h2>
+      <EquipmentCatalogue />
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>

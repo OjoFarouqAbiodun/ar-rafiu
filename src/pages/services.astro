@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ServiceList from '../components/ServiceList.astro';
+import ContactCtaSection from '../components/home/ContactCtaSection.astro';
+---
+
+<BaseLayout
+  title="Services"
+  description="IT equipment installation, maintenance, repairs, replacement, CCTV and biometric installation, server solutions, IT support, software solutions and power backup from Ar-Rafiu Integrated Services Limited."
+>
+  <PageHeader
+    eyebrow="What we do"
+    title="Services"
+    intro="Installation, maintenance and support for the equipment Ar-Rafiu supplies, and for equipment already in use."
+  />
+
+  <section class="page-section" aria-label="Service list">
+    <div class="container">
+      <h2 class="page-section__title">Service coverage</h2>
+      <ServiceList />
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>

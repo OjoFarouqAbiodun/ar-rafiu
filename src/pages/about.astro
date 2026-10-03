@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContactCtaSection from '../components/home/ContactCtaSection.astro';
+import { services } from '../data/services';
+---
+
+<BaseLayout
+  title="About"
+  description="About Ar-Rafiu Integrated Services Limited, a supplier of IT equipment and provider of installation, maintenance, repair and replacement services."
+>
+  <PageHeader
+    eyebrow="The company"
+    title="About Ar-Rafiu"
+    intro="Ar-Rafiu Integrated Services Limited supplies IT equipment and technology, and provides installation, maintenance, repair and replacement."
+  />
+
+  <section class="page-section" aria-label="Company information">
+    <div class="container">
+      <div class="prose">
+        <p>
+          The work the company carries out covers both new equipment and equipment
+          already in service. A single enquiry can cover a purchase, an installation,
+          a repair or an ongoing maintenance arrangement.
+        </p>
+
+        <h2>Service coverage</h2>
+        <ul>
+          {services.map((service) => <li>{service.name}</li>)}
+        </ul>
+
+        <h2>Company background</h2>
+        <p>
+          Company history, founding information, locations, certifications,
+          partnerships and client details have not been provided by the company and
+          are therefore not stated here. This section will be completed with
+          confirmed information rather than placeholder claims.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>

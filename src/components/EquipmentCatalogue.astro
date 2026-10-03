@@ -1,0 +1,86 @@
+---
+import { equipmentGroups } from '../data/equipment';
+
+/**
+ * The equipment catalogue, shared by the homepage section and the products page.
+ *
+ * Rendered as a description list rather than cards: eleven product lines as
+ * eleven boxes becomes an undifferentiated wall, whereas term/description pairs
+ * stay readable as a reference. Category names and one-line purposes are the
+ * only claims made, since no specifications have been supplied (PRD section 24).
+ */
+---
+
+<div class="catalogue">
+  {
+    equipmentGroups.map((group) => (
+      <section class="group" aria-labelledby={`group-${group.id}`}>
+        <h3 class="group__title" id={`group-${group.id}`}>
+          {group.title}
+        </h3>
+        <p class="group__description">{group.description}</p>
+        <dl class="group__categories">
+          {group.categories.map((category) => (
+            <div class="category">
+              <dt class="category__name">{category.name}</dt>
+              <dd class="category__detail">{category.description}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .group {
+    padding-block: var(--space-lg);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .group:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .group__title {
+    font-size: var(--step-2);
+    letter-spacing: -0.015em;
+  }
+
+  .group__description {
+    margin-block-start: var(--space-2xs);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  .group__categories {
+    display: grid;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-md);
+  }
+
+  .category {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .category__name {
+    font-weight: var(--weight-semibold);
+    color: var(--color-primary);
+  }
+
+  .category__detail {
+    max-width: 56ch;
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  @media (min-width: 48rem) {
+    .group__categories {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-lg);
+    }
+  }
+</style>

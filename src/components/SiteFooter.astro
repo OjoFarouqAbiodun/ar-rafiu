@@ -1,0 +1,184 @@
+---
+import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
+import { primaryNavigation } from '../data/navigation';
+import { company, placeholderContactDetails } from '../data/company';
+
+/**
+ * Site footer.
+ *
+ * The surface stays light for the same reason as the header: the supplied logo
+ * artwork is navy, so it cannot sit on a dark background. Contact fields that
+ * still hold placeholder values are labelled as such, because PRD sections 24
+ * and 25 forbid presenting temporary data as confirmed company information.
+ */
+
+const currentPath = Astro.url.pathname;
+const year = new Date().getFullYear();
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
+const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <img
+        src="/assets/brand/logo.svg"
+        alt={company.legalName}
+        width="1412"
+        height="256"
+      />
+      <p class="site-footer__summary">
+        IT equipment, technology solutions, installation, maintenance, repairs and
+        replacement.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <h2 class="site-footer__heading">Sections</h2>
+      <ul class="site-footer__list">
+        {
+          primaryNavigation.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={
+                  currentPath === item.href ? 'page' : undefined
+                }
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <h2 class="site-footer__heading">Contact</h2>
+      <ul class="site-footer__list">
+        <li>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+            WhatsApp
+            <span class="visually-hidden">(opens WhatsApp)</span>
+          </a>
+          {isPlaceholder('whatsapp') && <span class="site-footer__flag">Placeholder</span>}
+        </li>
+        <li>
+          <a href={phoneHref}>{company.contact.phone}</a>
+          {isPlaceholder('phone') && <span class="site-footer__flag">Placeholder</span>}
+        </li>
+        <li>
+          <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+          {isPlaceholder('email') && <span class="site-footer__flag">Placeholder</span>}
+        </li>
+        <li>
+          <span>{company.contact.address}</span>
+          {isPlaceholder('address') && <span class="site-footer__flag">Placeholder</span>}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__legal">
+    <p>&copy; {year} {company.legalName}</p>
+    <p class="site-footer__note">
+      Contact details shown are development placeholders and will be replaced once
+      confirmed by the company.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-block-start: auto;
+    padding-block: var(--space-2xl) var(--space-lg);
+    background-color: var(--color-surface-subtle);
+    border-top: 2px solid var(--color-primary);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer__brand img {
+    width: auto;
+    height: 2rem;
+  }
+
+  .site-footer__summary {
+    max-width: 34ch;
+    margin-block-start: var(--space-sm);
+    color: var(--color-text-muted);
+    font-size: var(--step--1);
+  }
+
+  .site-footer__heading {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .site-footer__list {
+    display: grid;
+    gap: var(--space-2xs);
+    margin-block-start: var(--space-sm);
+    font-size: var(--step-0);
+  }
+
+  .site-footer__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    color: var(--color-text);
+    text-decoration-color: var(--color-border-strong);
+  }
+
+  .site-footer__list a:hover {
+    color: var(--color-primary);
+    text-decoration-color: currentColor;
+  }
+
+  /* Placeholder marking is textual, not a colour cue, so it survives a
+     monochrome or high-contrast rendering. */
+  .site-footer__flag {
+    display: inline-block;
+    margin-inline-start: var(--space-2xs);
+    padding: 0.0625rem var(--space-3xs);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-xs);
+    font-size: 0.6875rem;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    vertical-align: middle;
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-md);
+    margin-block-start: var(--space-xl);
+    padding-block-start: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__note {
+    max-width: 58ch;
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__inner {
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

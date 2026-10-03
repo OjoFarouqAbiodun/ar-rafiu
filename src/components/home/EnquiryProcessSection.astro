@@ -1,0 +1,137 @@
+---
+/**
+ * How an enquiry works.
+ *
+ * Restates the flow in PRD section 10. Shown because PRD section 3 identifies
+ * friction between discovering something and making contact as the core problem,
+ * and because the pre-filled WhatsApp message is not obvious until it is
+ * explained.
+ */
+
+const steps = [
+  {
+    title: 'Choose what you need',
+    description:
+      'A product, a service, a repair or a general IT requirement. Equipment already in use is fine too.',
+  },
+  {
+    title: 'Open WhatsApp',
+    description:
+      'The enquiry link prepares a message naming your area of interest, so you do not have to write it from scratch.',
+  },
+  {
+    title: 'Review and send',
+    description:
+      'WhatsApp opens with the message ready. Add or correct any detail before sending.',
+  },
+  {
+    title: 'Reply on WhatsApp',
+    description:
+      'The enquiry reaches Ar-Rafiu through the company WhatsApp contact, so the conversation stays in one place.',
+  },
+];
+---
+
+<section class="process" id="enquiry" aria-labelledby="process-title">
+  <div class="container">
+    <p class="process__eyebrow">How enquiries work</p>
+    <h2 class="process__title" id="process-title">From enquiry to reply</h2>
+
+    <ol class="process__list">
+      {
+        steps.map((step, index) => (
+          <li class="process__step">
+            <span class="process__number" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <h3 class="process__step-title">{step.title}</h3>
+            <p class="process__description">{step.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    padding-block: var(--space-3xl);
+    background-color: var(--color-surface-dark);
+    color: var(--color-text-inverse);
+  }
+
+  .process__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red-300);
+  }
+
+  .process__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-4);
+  }
+
+  .process__list {
+    display: grid;
+    gap: 0;
+    margin-block-start: var(--space-xl);
+    border-block-start: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  .process__step {
+    padding-block: var(--space-md);
+    border-block-end: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  .process__number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    color: var(--red-400);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .process__step-title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+  }
+
+  .process__description {
+    margin-block-start: var(--space-3xs);
+    max-width: 48ch;
+    color: var(--color-text-inverse-muted);
+    font-size: var(--step-0);
+  }
+
+  @media (min-width: 48rem) {
+    .process__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-xl);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .process__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      column-gap: var(--space-lg);
+    }
+
+    .process__step {
+      /* A vertical rule instead of a full box, so four columns read as one
+         sequence rather than four cards. */
+      border-block-end: 0;
+      border-inline-start: 1px solid rgb(255 255 255 / 0.16);
+      padding-inline-start: var(--space-md);
+    }
+
+    .process__step:first-child {
+      border-inline-start: 0;
+      padding-inline-start: 0;
+    }
+  }
+</style>

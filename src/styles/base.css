@@ -21,6 +21,8 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100dvh;
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -28,6 +30,12 @@ body {
   font-size: var(--step-0);
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Lets the footer sit at the bottom of short pages instead of floating
+   mid-viewport. */
+main {
+  flex: 1 0 auto;
 }
 
 img,
@@ -94,6 +102,44 @@ ol[class] {
   margin-inline: auto;
 }
 
+/* Layout primitives shared by the interior pages, so page padding and long-form
+   measure are decided once rather than per page. */
+.page-section {
+  padding-block: var(--space-2xl);
+}
+
+.page-section--subtle {
+  background-color: var(--color-surface-subtle);
+}
+
+/* Interior pages need an h2 between the page h1 and the h3 headings inside the
+   catalogue and service lists. */
+.page-section__title {
+  margin-block-end: var(--space-lg);
+  font-size: var(--step-3);
+}
+
+.prose > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+.prose p,
+.prose li {
+  max-width: var(--measure);
+  color: var(--color-text-muted);
+}
+
+.prose h2 {
+  font-size: var(--step-2);
+  margin-block-start: var(--space-lg);
+}
+
+.prose a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -103,6 +149,26 @@ ol[class] {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* Off-screen until focused, then pinned to the top-left above every layer.
+   Positioned rather than clipped so it remains visible when focused. */
+.skip-link {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--z-modal);
+  padding: var(--space-2xs) var(--space-sm);
+  background-color: var(--color-primary);
+  border-radius: 0 0 var(--radius-sm) 0;
+  color: var(--color-primary-text);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transform: translateY(-110%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContactCtaSection from '../components/home/ContactCtaSection.astro';
+import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
+import { company, placeholderContactDetails } from '../data/company';
+
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
+const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact Ar-Rafiu Integrated Services Limited. WhatsApp is the primary enquiry route, with phone and email also available."
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Contact Ar-Rafiu"
+    intro="WhatsApp is the primary enquiry route. Phone and email are listed as alternatives."
+  />
+
+  <section class="page-section" aria-label="Contact details">
+    <div class="container">
+      <dl class="details">
+        <div class="details__row">
+          <dt class="details__label">WhatsApp</dt>
+          <dd class="details__value">
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+              Send a message
+              <span class="visually-hidden">(opens WhatsApp)</span>
+            </a>
+            {isPlaceholder('whatsapp') && <span class="details__flag">Placeholder</span>}
+          </dd>
+        </div>
+
+        <div class="details__row">
+          <dt class="details__label">Phone</dt>
+          <dd class="details__value">
+            <a href={phoneHref}>{company.contact.phone}</a>
+            {isPlaceholder('phone') && <span class="details__flag">Placeholder</span>}
+          </dd>
+        </div>
+
+        <div class="details__row">
+          <dt class="details__label">Email</dt>
+          <dd class="details__value">
+            <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+            {isPlaceholder('email') && <span class="details__flag">Placeholder</span>}
+          </dd>
+        </div>
+
+        <div class="details__row">
+          <dt class="details__label">Address</dt>
+          <dd class="details__value">
+            <span>{company.contact.address}</span>
+            {isPlaceholder('address') && <span class="details__flag">Placeholder</span>}
+          </dd>
+        </div>
+      </dl>
+
+      <p class="details__note">
+        Contact details are development placeholders. A general enquiry form that
+        generates a WhatsApp message is planned for a later phase.
+      </p>
+    </div>
+  </section>
+
+  <ContactCtaSection />
+</BaseLayout>
+
+<style>
+  .details {
+    max-width: 44rem;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .details__row {
+    display: grid;
+    gap: var(--space-3xs) var(--space-md);
+    padding-block: var(--space-sm);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .details__label {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .details__value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .details__value a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    font-size: var(--step-1);
+    font-weight: var(--weight-medium);
+  }
+
+  .details__flag {
+    display: inline-block;
+    padding: 0.0625rem var(--space-3xs);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-xs);
+    font-size: 0.6875rem;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .details__note {
+    margin-block-start: var(--space-lg);
+    max-width: var(--measure);
+    font-size: var(--step--1);
+    color: var(--color-text-subtle);
+  }
+
+  @media (min-width: 40rem) {
+    .details__row {
+      grid-template-columns: 10rem 1fr;
+      align-items: baseline;
+    }
+  }
+</style>

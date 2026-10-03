@@ -1,0 +1,56 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { buildPageMeta, type PageMeta } from '../lib/seo';
+
+/**
+ * The single document shell for every page.
+ *
+ * Favicons, font and token stylesheets, the header, the footer and the skip
+ * link live here so individual pages only describe their own content. Favicon
+ * links moved out of the setup-verification page into this shared location.
+ */
+
+interface Props extends PageMeta {}
+
+const { title, description } = Astro.props;
+const meta = buildPageMeta({ title, description });
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+
+    <meta property="og:type" content={meta.openGraph.type} />
+    <meta property="og:site_name" content={meta.openGraph.siteName} />
+    <meta property="og:title" content={meta.openGraph.title} />
+    <meta property="og:description" content={meta.openGraph.description} />
+    <meta name="twitter:card" content={meta.twitter.card} />
+    <meta name="twitter:title" content={meta.twitter.title} />
+    <meta name="twitter:description" content={meta.twitter.description} />
+
+    <meta name="theme-color" content="#010067" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>
