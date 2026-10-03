@@ -1,0 +1,71 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import { company, placeholderContactDetails } from '../data/company';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Ar-Rafiu Integrated Services Limited</title>
+    <meta
+      name="description"
+      content="Temporary setup verification page. Replaced by the homepage in the layout phase."
+    />
+  </head>
+  <body>
+    <main class="container" style="padding-block: var(--space-2xl);">
+      <p
+        style="
+          font-size: var(--step--1);
+          font-weight: var(--weight-semibold);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--color-accent-text);
+        "
+      >
+        Setup verification
+      </p>
+
+      <h1 style="font-size: var(--step-4); margin-block: var(--space-sm) var(--space-md);">
+        {company.legalName}
+      </h1>
+
+      <img
+        src="/assets/brand/logo.svg"
+        alt={company.legalName}
+        width="1412"
+        height="256"
+        style="width: 212px; height: auto;"
+      />
+
+      <p style="margin-block: var(--space-lg) var(--space-md); max-width: var(--measure); color: var(--color-text-muted);">
+        This page exists only to confirm that the Astro pipeline, design tokens, and
+        centralised company configuration are wired up correctly. It is not the
+        homepage and carries no placeholder marketing copy.
+      </p>
+
+      <section aria-labelledby="setup-state">
+        <h2 id="setup-state" style="font-size: var(--step-2); margin-block-end: var(--space-sm);">
+          Build state
+        </h2>
+        <ul style="display: grid; gap: var(--space-2xs); color: var(--color-text-muted);">
+          <li>Design tokens and base stylesheet loaded.</li>
+          <li>Company configuration resolved: {company.tradingName}.</li>
+          <li>
+            Placeholder contact details still outstanding: {
+              placeholderContactDetails.join(', ')
+            }.
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
