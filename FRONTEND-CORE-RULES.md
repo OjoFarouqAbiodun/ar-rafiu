@@ -882,18 +882,11 @@ Do not treat content as filler.
 
 Headings, descriptions, labels, button text, and supporting copy should communicate actual meaning.
 
-Avoid generic AI copy such as:
-
-* “Unlock your potential”
-* “Take your business to the next level”
-* “Experience the future”
-* “Solutions tailored to your needs”
-
-unless the project's actual brand/content requires such language.
+Avoid generic AI copy and empty marketing language unless the project's actual brand/content requires such language. Section 36 defines the full standard and the phrases to watch for.
 
 Use the supplied content whenever possible.
 
-Do not invent business claims, statistics, testimonials, certifications, reviews, awards, or company history.
+Do not invent business claims, statistics, testimonials, certifications, reviews, awards, or company history. Section 36.6 lists the full set of evidence that must never be fabricated.
 
 ---
 
@@ -931,6 +924,8 @@ When actual content is unavailable:
 * Keep the structure realistic
 * Make replacement straightforward
 * Do not invent claims presented as real information
+
+Section 36.12 covers how to keep placeholder copy distinguishable from approved content.
 
 ---
 
@@ -1153,7 +1148,234 @@ Visual aesthetics must never break functionality, accessibility, or usability.
 
 ---
 
-# 36. FINAL AGENT DIRECTIVE
+# 36. CONTENT & COPYWRITING STANDARDS
+
+Copy is not decoration applied after the design is finished. It is a primary design material and must be designed deliberately rather than produced by default.
+
+This section extends section 25 and section 27 with the detailed working rules for user-facing copy. Those sections state the principle; this section states how to apply it.
+
+It does not alter the priority order in section 35. Copy still never outranks functionality, accessibility, or usability.
+
+## 36.1 Write for the user, not for the company
+
+Begin from where the visitor actually is:
+
+* The problem they have
+* The need they are trying to meet
+* The question they arrived with
+* The situation they are in
+* The goal they are working towards
+* The concern holding them back
+* The outcome they want
+
+Avoid writing primarily to praise the company.
+
+Illustration only, and not approved copy for any project:
+
+```text
+Weak direction:
+"Leading provider of innovative, cutting-edge ICT solutions."
+
+Stronger direction:
+"Need equipment for a new setup, or trying to replace something that has
+stopped working? Tell us what you need and we can help you work through
+the options."
+```
+
+The first describes the company. The second names the visitor's situation and indicates what happens next.
+
+Test any opening line: could it appear unchanged on a competitor's site? If so, it is probably about the company rather than the reader.
+
+## 36.2 Avoid generic AI and business marketing language
+
+Treat phrases such as these as warning signs when they add little real meaning:
+
+* cutting-edge solutions
+* seamless experience
+* innovative solutions
+* empowering businesses
+* unlock your potential
+* transform your business
+* tailored solutions for your unique needs
+* committed to excellence
+* comprehensive solutions
+* world-class service
+* next-generation technology
+* trusted partner
+
+This is not a mechanical ban. Any of these may be correct when the project's brand voice genuinely calls for it and the surrounding context supports the claim.
+
+The rule is to avoid empty, interchangeable marketing language: wording that could be moved to any company in any industry without changing its meaning.
+
+When a phrase carries no information, replace it with something specific or remove it.
+
+## 36.3 Make copy communicate, not decorate
+
+Every important piece of copy should be doing at least one of these jobs:
+
+* Explain
+* Answer
+* Reassure
+* Clarify
+* Guide
+* Demonstrate relevance
+* Address an objection
+* Help the visitor decide
+* Lead naturally to an action
+
+If a paragraph cannot be assigned one of those purposes, it is not earning its place.
+
+Do not add paragraphs simply to make a section look complete.
+
+## 36.4 Use problem, relevance, benefit, reassurance, action where it helps
+
+A common and effective order is:
+
+```text
+Problem -> Relevance -> Benefit -> Reassurance -> Action
+```
+
+Use it when it genuinely helps a visitor understand why something matters and what they can do next.
+
+Do not force this structure onto every section. Reference material, specification tables, contact details, and policy or legal text usually do not benefit from it.
+
+## 36.5 Prefer specific, human CTAs
+
+A call to action should make the next step obvious.
+
+Prefer context-specific actions:
+
+* Ask About This Product
+* Discuss Your Setup
+* Request a Repair
+* Ask About Availability
+* Talk to Us About Your Requirement
+
+Avoid leaning repeatedly on vague actions such as:
+
+* Get Started
+* Learn More
+* Discover More
+* Explore
+* Click Here
+
+These are not forbidden, but each should have a clear reason to exist. If a visitor could not tell what happens after clicking, the label is too vague.
+
+The visual treatment of calls to action is covered separately in section 10.
+
+## 36.6 Do not fabricate persuasive evidence
+
+Never invent:
+
+* Statistics
+* Testimonials
+* Reviews
+* Client names
+* Project history
+* Years of experience
+* Certifications
+* Awards
+* Guarantees
+* Response times
+* Prices
+* Product availability
+* Technical specifications
+* Product capabilities
+* Business achievements
+* Claims of market leadership
+
+If the information is not known, do not approximate it. Either write useful neutral copy that does not depend on the missing fact, or leave the factual field explicitly pending approval.
+
+See also section 30 on never fabricating results or requirements.
+
+## 36.7 Separate persuasive copy from factual claims
+
+Copy can communicate benefits and user relevance without inventing facts.
+
+It is acceptable to explain, in general terms, why a category of product or service matters to someone in the visitor's situation.
+
+It is not acceptable to claim that this specific company, or this specific product, provides a capability, specification, or outcome unless that has been verified.
+
+Persuasion belongs in relevance and clarity. Facts belong in verified data.
+
+## 36.8 Make each project sound like itself
+
+Copy should reflect:
+
+* The actual industry
+* The audience
+* The product or service
+* The brand personality
+* The communication context
+
+Avoid interchangeable copy that could be moved to ten unrelated company websites by changing the logo and company name.
+
+Section 33 states the equivalent test for design.
+
+## 36.9 Vary content structure
+
+Do not make every section:
+
+```text
+Heading
+Generic paragraph
+Three cards
+CTA
+```
+
+Let the structure follow the information being communicated. A comparison may need a table. A process may need ordered steps. A single strong statement may need no supporting paragraph at all.
+
+See section 6 on layout architecture.
+
+## 36.10 Treat headings as communication
+
+Headings establish hierarchy and meaning. They are navigation, not decoration.
+
+Avoid headings that exist only because a section appears to need one, and avoid repeating the same idea across several headings.
+
+Structural requirements for heading elements, including correct levels and not skipping levels for visual sizing, are in section 8.
+
+## 36.11 Copy and design should inform each other
+
+Content hierarchy should drive visual hierarchy.
+
+The interface should emphasise information according to its importance to the user, not according to what fits a template.
+
+Do not write generic copy first and decorate it afterwards. Decide what the visitor needs to understand, then give that the visual weight.
+
+## 36.12 Distinguish placeholder content from approved content
+
+When real business information is unavailable:
+
+* Do not disguise placeholders as verified information
+* Do not fill missing facts with plausible-sounding AI copy
+* Keep factual fields easy to replace later
+* Make temporary copy useful without making unsupported claims
+
+A clearly marked placeholder is honest and maintainable. An unmarked plausible sentence is neither.
+
+Section 27 covers the structural counterpart.
+
+## 36.13 Perform a dedicated copy audit
+
+Before treating a project as content-complete, read the user-facing copy on its own and inspect it for:
+
+* Generic AI phrasing
+* Empty marketing language
+* Repetition
+* Vague headings
+* Weak or repetitive CTAs
+* Unsupported claims
+* Unnecessary paragraphs
+* Unclear communication
+* Whether the copy addresses the visitor's actual situation
+* Whether the tone fits the brand and audience
+
+This is a separate pass from design review. A page can satisfy every visual, responsive, and accessibility check in section 32 and still be badly written.
+
+---
+
+# 37. FINAL AGENT DIRECTIVE
 
 When working on any frontend project under this standard:
 
