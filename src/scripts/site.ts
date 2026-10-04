@@ -6,7 +6,14 @@
  * navigation. Animation is handled separately in `src/lib/motion`.
  */
 
-const DESKTOP_NAV = '(min-width: 48rem)';
+/**
+ * Where the full navigation takes over from the collapsed panel.
+ *
+ * Matches the `--bp-lg` media queries in `SiteHeader.astro`. The two have to
+ * agree: if the stylesheet treated a width as mobile while this query treated
+ * it as desktop, the toggle would be on screen with no panel to collapse into.
+ */
+const DESKTOP_NAV = '(min-width: 64rem)';
 
 function initSiteNav(): void {
   const header = document.querySelector<HTMLElement>('[data-site-header]');

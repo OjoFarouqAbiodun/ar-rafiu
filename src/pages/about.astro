@@ -3,6 +3,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 import { companySummary } from '../data/company';
+import { equipmentGroups } from '../data/equipment';
+import { services } from '../data/services';
+
+/**
+ * About page.
+ *
+ * PRD section 9.5 asks for a company introduction, what the company does, its
+ * areas of expertise, its professional approach and relevant company
+ * information. The areas of expertise are read from the same data that builds
+ * the catalogue and the services list rather than restated here, so the page
+ * cannot drift from them and a newly added category appears on its own.
+ *
+ * The approach section is limited to what the rest of the site already states:
+ * existing equipment is in scope, one enquiry can span a purchase through to a
+ * replacement, and the practical detail that makes an enquiry workable. PRD
+ * section 9.5 forbids inventing history, statistics, certifications or clients,
+ * and section 36.6 forbids experience, guarantee or response-time claims, so
+ * nothing of that kind appears here.
+ */
 ---
 
 <BaseLayout
@@ -29,5 +48,145 @@ import { companySummary } from '../data/company';
     </div>
   </section>
 
+  <section
+    class="page-section page-section--subtle expertise"
+    aria-labelledby="expertise-title"
+  >
+    <div class="container">
+      <p class="expertise__eyebrow">What we cover</p>
+      <h2 class="expertise__title" id="expertise-title">Areas of expertise</h2>
+      <p class="expertise__lead">
+        The areas Ar-Rafiu works in, and what each one covers. If what you need
+        sits outside them, describe it anyway: requirements that do not fit a
+        listed area are raised through the same enquiry route.
+      </p>
+
+      <dl class="expertise__list">
+        {
+          equipmentGroups.map((group) => (
+            <div class="expertise__row">
+              <dt class="expertise__term">{group.title}</dt>
+              <dd class="expertise__detail">{group.description}</dd>
+            </div>
+          ))
+        }
+
+        <div class="expertise__row">
+          <dt class="expertise__term">Services and support</dt>
+          <dd class="expertise__detail">
+            <ul class="expertise__items">
+              {services.map((service) => <li>{service.name}</li>)}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section approach" aria-labelledby="approach-title">
+    <div class="container">
+      <p class="approach__eyebrow">How we work</p>
+      <h2 class="approach__title" id="approach-title">
+        What to include in an enquiry
+      </h2>
+
+      <div class="prose">
+        <p>
+          Describe the equipment and what it is doing, or not doing. If you are
+          not sure which service applies, that is enough to start with: what the
+          equipment is, what happened, and anything already tried are the details
+          that help.
+        </p>
+
+        <p>
+          For something that has stopped working, a photograph of the model or of
+          the error message is usually enough to work out what is involved. For a
+          new requirement, what it needs to do is more useful than a
+          specification: the number of people or machines it has to cover, and
+          where it will be used.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <ContactCtaSection />
 </BaseLayout>
+
+<style>
+  .expertise__eyebrow,
+  .approach__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .expertise__title,
+  .approach__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-4);
+  }
+
+  .expertise__lead {
+    margin-block-start: var(--space-sm);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+
+  /* Term and definition rather than cards: the entries are short, they read as
+     a reference, and the same hairline rhythm already separates the catalogue
+     and service lists elsewhere on the site. */
+  .expertise__list {
+    margin-block-start: var(--space-xl);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .expertise__row {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-block: var(--space-md);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .expertise__term {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+  }
+
+  .expertise__detail {
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+    font-size: var(--step-0);
+  }
+
+  /* Service names run inline with a middot rather than stacking as a second
+     list, so eleven of them stay a compact reference instead of a tall column
+     beside a one-line equipment description. */
+  .expertise__items {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .expertise__items li:not(:first-child)::before {
+    content: '\00b7';
+    margin-inline: var(--space-xs);
+    color: var(--color-accent-text);
+  }
+
+  .approach .prose {
+    margin-block-start: var(--space-md);
+  }
+
+  @media (min-width: 48rem) {
+    .expertise__row {
+      grid-template-columns: 18rem minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: baseline;
+    }
+  }
+</style>

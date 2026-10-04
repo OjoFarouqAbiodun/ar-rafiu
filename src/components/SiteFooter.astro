@@ -1,6 +1,6 @@
 ---
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
-import { primaryNavigation } from '../data/navigation';
+import { primaryNavigation, isCurrentPath } from '../data/navigation';
 import { company, placeholderContactDetails, placeholderNotice, companySummary } from '../data/company';
 
 /**
@@ -40,7 +40,7 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
               <a
                 href={item.href}
                 aria-current={
-                  currentPath === item.href ? 'page' : undefined
+                  isCurrentPath(item.href, currentPath) ? 'page' : undefined
                 }
               >
                 {item.label}
@@ -168,6 +168,10 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
   .site-footer__legal {
     display: flex;
     flex-wrap: wrap;
+    /* Centre the items against each other rather than stretching them, so the
+       copyright and the credit share a baseline when they end up on one line.
+       Wrapping is kept, so a narrow viewport still stacks them. */
+    align-items: center;
     gap: var(--space-2xs) var(--space-md);
     margin-block-start: var(--space-xl);
     padding-block-start: var(--space-md);
@@ -180,11 +184,20 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
     max-width: 58ch;
   }
 
-  /* Pushed to the far edge so the credit sits opposite the copyright rather
-     than joining the notice text. */
+  /* Left-aligned on mobile: the credit simply follows the copyright. An auto
+     margin is deliberately not applied here, because on a wrapped line by
+     itself it would absorb all the free space and push the credit to the right
+     edge, reading as a centred item. */
   .site-footer__credit {
-    margin-inline-start: auto;
     white-space: nowrap;
+  }
+
+  /* Tablet and up: pushed to the far edge so the credit sits opposite the
+     copyright rather than joining the notice text. */
+  @media (min-width: 48rem) {
+    .site-footer__credit {
+      margin-inline-start: auto;
+    }
   }
 
   /* Muted like the rest of the legal row rather than picking up the primary

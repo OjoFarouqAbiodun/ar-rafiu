@@ -1,6 +1,6 @@
 ---
 import EnquiryLink from './EnquiryLink.astro';
-import { primaryNavigation } from '../data/navigation';
+import { primaryNavigation, isCurrentPath } from '../data/navigation';
 import { company } from '../data/company';
 
 /**
@@ -12,11 +12,6 @@ import { company } from '../data/company';
  */
 
 const currentPath = Astro.url.pathname;
-
-function isCurrent(href: string): boolean {
-  if (href === '/') return currentPath === '/';
-  return currentPath === href || currentPath.startsWith(`${href}/`);
-}
 ---
 
 <header class="site-header" data-site-header data-nav-ready="false">
@@ -76,7 +71,7 @@ function isCurrent(href: string): boolean {
               <a
                 class="site-nav__link"
                 href={item.href}
-                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                aria-current={isCurrentPath(item.href, currentPath) ? 'page' : undefined}
               >
                 {item.label}
               </a>
@@ -195,8 +190,14 @@ function isCurrent(href: string): boolean {
 
   /* Below the navigation breakpoint the panel is collapsed, but only once the
      script has marked the header as ready. Without JavaScript the list stays
-     visible and stacked, so navigation never depends on scripting. */
-  @media (max-width: 47.9375rem) {
+     visible and stacked, so navigation never depends on scripting.
+
+     The breakpoint is `--bp-lg` (64rem). PRD section 19 puts tablet at 768px
+     and desktop at 1024px, and the collapsed panel is the tablet
+     presentation, so the full navigation starts at the desktop tier rather
+     than at 768px. `site.ts` queries the same value so the script and these
+     rules cannot disagree. */
+  @media (max-width: 63.9375rem) {
     .site-header__inner {
       padding-block: var(--space-2xs);
     }
@@ -271,7 +272,7 @@ function isCurrent(href: string): boolean {
     }
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 64rem) {
     .site-header__inner {
       min-height: 5rem;
     }

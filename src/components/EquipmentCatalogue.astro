@@ -27,11 +27,21 @@ interface Props {
 
 const { headingLevel = 3 } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
+/**
+ * Groups with no categories are dropped rather than rendered.
+ *
+ * A group is only a heading and a description wrapped around its categories, so
+ * an empty one would contribute a title with nothing under it and an empty
+ * definition list. Filtering before mapping also keeps the first rendered group
+ * as `:first-child`, which is what removes its top rule and padding.
+ */
+const populatedGroups = equipmentGroups.filter((group) => group.categories.length > 0);
 ---
 
 <div class="catalogue">
   {
-    equipmentGroups.map((group) => (
+    populatedGroups.map((group) => (
       <section class="group" aria-labelledby={`group-${group.id}`}>
         <Heading class="group__title" id={`group-${group.id}`}>
           {group.title}
