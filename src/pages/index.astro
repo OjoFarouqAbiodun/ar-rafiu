@@ -5,7 +5,6 @@ import EquipmentSection from '../components/home/EquipmentSection.astro';
 import ServicesSection from '../components/home/ServicesSection.astro';
 import EnquiryProcessSection from '../components/home/EnquiryProcessSection.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
-import { company } from '../data/company';
 
 /**
  * Homepage section order follows the questions in PRD section 16: who the
@@ -16,10 +15,10 @@ import { company } from '../data/company';
  */
 
 const description =
-  'Ar-Rafiu Integrated Services Limited supplies IT equipment and technology solutions, and provides installation, maintenance, repair and replacement support.';
+  'Ar-Rafiu Integrated Services Limited supplies IT equipment and technology, and provides installation, maintenance, repair and replacement.';
 ---
 
-<BaseLayout title={company.legalName} description={description}>
+<BaseLayout title="IT equipment, repairs & support" description={description}>
   <IntroSection />
   <EquipmentSection />
   <ServicesSection />

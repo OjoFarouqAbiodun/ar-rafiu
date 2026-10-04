@@ -40,8 +40,8 @@ export interface EquipmentGroup {
 export const equipmentGroups: EquipmentGroup[] = [
   {
     id: 'compute',
-    title: 'Compute & infrastructure',
-    description: 'The hardware that business operations actually run on.',
+    title: 'Computers & infrastructure',
+    description: 'Computers, servers and the racks that hold them.',
     categories: [
       {
         id: 'servers',
@@ -68,7 +68,7 @@ export const equipmentGroups: EquipmentGroup[] = [
       {
         id: 'printers',
         name: 'Printers',
-        description: 'Printers for everyday office and shared printing requirements.',
+        description: 'Printers for everyday documents, from occasional pages to shared office print runs.',
       },
       {
         id: 'photocopiers',
@@ -102,24 +102,24 @@ export const equipmentGroups: EquipmentGroup[] = [
       {
         id: 'inverters',
         name: 'Inverters',
-        description: 'Inverters for backup power supply.',
+        description: 'Inverters that turn stored battery power into mains electricity for equipment that needs a normal supply.',
       },
       {
         id: 'batteries',
         name: 'Batteries',
-        description: 'Batteries for backup power systems.',
+        description: 'Batteries that store power for use when the mains supply is unavailable.',
       },
     ],
   },
   {
     id: 'software',
     title: 'Software & applications',
-    description: 'Application and software solutions.',
+    description: 'Software used in day-to-day business work.',
     categories: [
       {
         id: 'applications',
         name: 'Applications',
-        description: 'Software and application solutions for business requirements.',
+        description: 'Business software and applications used for everyday organisational work.',
       },
     ],
   },

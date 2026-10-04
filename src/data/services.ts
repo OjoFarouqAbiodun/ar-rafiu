@@ -29,52 +29,52 @@ export const services: Service[] = [
   {
     id: 'maintenance',
     name: 'Equipment maintenance',
-    description: 'Scheduled upkeep intended to keep equipment working reliably.',
+    description: 'Maintenance carried out on equipment to keep it working reliably.',
   },
   {
     id: 'repairs',
     name: 'Equipment repairs',
-    description: 'Diagnosis and repair of faulty equipment.',
+    description: 'Finding the cause of a fault and repairing equipment that has stopped working properly.',
   },
   {
     id: 'replacement',
     name: 'Equipment replacement',
-    description: 'Replacing equipment that can no longer be repaired economically.',
+    description: 'Replacing equipment that has reached the end of its useful life.',
   },
   {
     id: 'cctv-installation',
     name: 'CCTV installation',
-    description: 'Installing camera systems for monitoring and security.',
+    description: 'Fitting and connecting camera systems, and setting them up for the area being monitored.',
   },
   {
     id: 'biometric-installation',
     name: 'Biometric system installation',
-    description: 'Installing biometric identification and access control systems.',
+    description: 'Fitting biometric devices such as fingerprint readers and setting them up for access control.',
   },
   {
     id: 'server-solutions',
     name: 'Server solutions',
-    description: 'Server hardware, racking and related infrastructure support.',
+    description: 'Server hardware, racking and the physical setup around them.',
   },
   {
     id: 'it-support',
     name: 'IT support',
-    description: 'Technical support for IT equipment and related technology issues.',
+    description: 'Troubleshooting problems with IT equipment and the technology around it.',
   },
   {
     id: 'software-solutions',
     name: 'Software & application solutions',
-    description: 'Software and application solutions matched to business requirements.',
+    description: 'Software and applications. State the requirement when you enquire and it can be matched.',
   },
   {
     id: 'power-backup',
     name: 'Power backup solutions',
-    description: 'Inverter and battery backup power solutions.',
+    description: 'Inverter and battery systems for when the mains supply is interrupted.',
   },
   {
     id: 'other-technology',
     name: 'Other technology services',
-    description: 'Related technology equipment and services not listed above.',
+    description: 'Other technology equipment and services, raised through the same enquiry route.',
   },
 ];
 

@@ -4,17 +4,21 @@ import { company } from '../data/company';
  * Builds the enquiry body defined in PRD section 10. Callers pass the labelled
  * details relevant to the enquiry, for example `{ Product: 'Rack Server' }` on a
  * product page or `{ Service: 'CCTV Installation' }` on a service page.
+ *
+ * General enquiries pass nothing, so the message asks what the visitor needs
+ * instead of asserting an interest they have not expressed.
  */
-export function buildEnquiryMessage(details: Record<string, string>): string {
-  const body = Object.entries(details)
+export function buildEnquiryMessage(details: Record<string, string> = {}): string {
+  const subject = Object.entries(details)
     .map(([label, value]) => `${label}: ${value}`)
-    .join('\n\n');
+    .join(', ');
 
   return [
     `Hello ${company.legalName},`,
-    'I would like to make an enquiry about:',
-    body,
-    'Please provide more information about availability, specifications and pricing.',
+    subject
+      ? `I would like to ask about ${subject}.`
+      : 'I would like to ask about your equipment or services.',
+    'Please let me know what details you need from me.',
     'Thank you.',
   ].join('\n\n');
 }

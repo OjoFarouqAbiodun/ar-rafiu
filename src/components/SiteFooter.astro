@@ -1,7 +1,7 @@
 ---
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
 import { primaryNavigation } from '../data/navigation';
-import { company, placeholderContactDetails } from '../data/company';
+import { company, placeholderContactDetails, placeholderNotice, companySummary } from '../data/company';
 
 /**
  * Site footer.
@@ -14,7 +14,7 @@ import { company, placeholderContactDetails } from '../data/company';
 
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
-const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
 const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
 const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
 ---
@@ -28,10 +28,7 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
         width="1412"
         height="256"
       />
-      <p class="site-footer__summary">
-        IT equipment, technology solutions, installation, maintenance, repairs and
-        replacement.
-      </p>
+      <p class="site-footer__summary">{companySummary}</p>
     </div>
 
     <nav class="site-footer__nav" aria-label="Footer">
@@ -82,9 +79,17 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
 
   <div class="container site-footer__legal">
     <p>&copy; {year} {company.legalName}</p>
-    <p class="site-footer__note">
-      Contact details shown are development placeholders and will be replaced once
-      confirmed by the company.
+    <p class="site-footer__note">{placeholderNotice}</p>
+    <p class="site-footer__credit">
+      Made with <span aria-hidden="true">❤️</span> by
+      <a
+        href="https://linkedin.com/in/ojo-farouq-abiodun/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ojo Farouq
+        <span class="visually-hidden">(opens in a new tab)</span>
+      </a>
     </p>
   </div>
 </footer>
@@ -173,6 +178,29 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
 
   .site-footer__note {
     max-width: 58ch;
+  }
+
+  /* Pushed to the far edge so the credit sits opposite the copyright rather
+     than joining the notice text. */
+  .site-footer__credit {
+    margin-inline-start: auto;
+    white-space: nowrap;
+  }
+
+  /* Muted like the rest of the legal row rather than picking up the primary
+     link colour, so the credit stays a quiet detail. The name is underlined by
+     neither state: an underline under a personal credit reads as a link to the
+     site rather than to a profile, so the pointer cursor carries the affordance
+     instead. */
+  .site-footer__credit a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .site-footer__credit a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
   }
 
   @media (min-width: 48rem) {

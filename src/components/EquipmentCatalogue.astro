@@ -14,15 +14,28 @@ import { equipmentGroups } from '../data/equipment';
  * is scanning for and a repeated action label would add noise without adding a
  * destination.
  */
+interface Props {
+  /**
+   * Heading level for the group titles. The homepage places the catalogue under
+   * its own section heading, so groups sit at `h3`; the products page has no
+   * wrapper heading of its own, so they sit at `h2` there. Keeping this explicit
+   * is what allows the redundant page-level label heading to be removed without
+   * leaving a skipped level (FRONTEND-CORE-RULES section 8).
+   */
+  headingLevel?: 2 | 3;
+}
+
+const { headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <div class="catalogue">
   {
     equipmentGroups.map((group) => (
       <section class="group" aria-labelledby={`group-${group.id}`}>
-        <h3 class="group__title" id={`group-${group.id}`}>
+        <Heading class="group__title" id={`group-${group.id}`}>
           {group.title}
-        </h3>
+        </Heading>
         <p class="group__description">{group.description}</p>
         <dl class="group__categories">
           {group.categories.map((category) => (

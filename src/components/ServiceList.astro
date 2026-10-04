@@ -12,6 +12,20 @@ import { services } from '../data/services';
  * decorative and the name stays the target.
  */
 
+interface Props {
+  /**
+   * Heading level for the service names. The homepage places the list under its
+   * own section heading, so names sit at `h3`; the services page has no wrapper
+   * heading of its own, so they sit at `h2` there. Keeping this explicit is what
+   * allows the redundant page-level label heading to be removed without leaving a
+   * skipped level (FRONTEND-CORE-RULES section 8).
+   */
+  headingLevel?: 2 | 3;
+}
+
+const { headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
 const formatted = services.map((service, index) => ({
   ...service,
   number: String(index + 1).padStart(2, '0'),
@@ -26,9 +40,9 @@ const formatted = services.map((service, index) => ({
           {service.number}
         </span>
         <div class="service__body">
-          <h3 class="service__name">
+          <Heading class="service__name">
             <a class="service__link" href={`/services/${service.id}`}>{service.name}</a>
-          </h3>
+          </Heading>
           <p class="service__description">{service.description}</p>
         </div>
       </li>

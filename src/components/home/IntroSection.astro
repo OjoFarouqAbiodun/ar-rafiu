@@ -16,8 +16,6 @@ import EnquiryTopics from './EnquiryTopics.astro';
 <section class="intro" aria-labelledby="intro-title">
   <div class="container intro__inner">
     <div class="intro__lead">
-      <p class="intro__eyebrow">IT equipment &amp; technology solutions</p>
-
       <h1 class="intro__title" id="intro-title">
         IT equipment, technology solutions and technical support
       </h1>
@@ -31,7 +29,7 @@ import EnquiryTopics from './EnquiryTopics.astro';
       </p>
 
       <div class="intro__actions">
-        <EnquiryLink details={{ Interest: 'General enquiry' }} variant="primary">
+        <EnquiryLink variant="primary">
           Enquire on WhatsApp
         </EnquiryLink>
         <ActionLink href="#equipment" variant="secondary">See what we supply</ActionLink>
@@ -56,16 +54,9 @@ import EnquiryTopics from './EnquiryTopics.astro';
     align-items: start;
   }
 
-  .intro__eyebrow {
-    font-size: var(--step--1);
-    font-weight: var(--weight-semibold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-accent-text);
-  }
-
+  /* No top margin: the h1 opens the section now that the duplicated eyebrow has
+     been removed. */
   .intro__title {
-    margin-block: var(--space-sm) 0;
     font-size: var(--step-5);
     max-width: 20ch;
   }

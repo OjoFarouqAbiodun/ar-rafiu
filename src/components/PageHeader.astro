@@ -2,10 +2,14 @@
 /**
  * Shared interior-page header. Keeps the eyebrow, title and introduction pattern
  * identical across products, services, about, contact and the 404 page.
+ *
+ * The eyebrow is optional because two of those pages do not need one: the about
+ * page and the 404 page already say what they are in the title, and an eyebrow
+ * that only restates the heading is noise (FRONTEND-CORE-RULES section 36.10).
  */
 
 interface Props {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   intro: string;
 }
@@ -15,7 +19,7 @@ const { eyebrow, title, intro } = Astro.props;
 
 <header class="page-header">
   <div class="container">
-    <p class="page-header__eyebrow">{eyebrow}</p>
+    {eyebrow && <p class="page-header__eyebrow">{eyebrow}</p>}
     <h1 class="page-header__title">{title}</h1>
     <p class="page-header__intro">{intro}</p>
   </div>

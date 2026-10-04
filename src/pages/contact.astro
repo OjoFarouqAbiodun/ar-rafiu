@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
-import { company, placeholderContactDetails } from '../data/company';
+import { company, placeholderContactDetails, placeholderNotice } from '../data/company';
 
-const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
 const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
 const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
 ---
@@ -15,7 +15,7 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
   description="Contact Ar-Rafiu Integrated Services Limited. WhatsApp is the primary enquiry route, with phone and email also available."
 >
   <PageHeader
-    eyebrow="Contact"
+    eyebrow="Enquiries"
     title="Contact Ar-Rafiu"
     intro="WhatsApp is the primary enquiry route. Phone and email are listed as alternatives."
   />
@@ -27,7 +27,7 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
           <dt class="details__label">WhatsApp</dt>
           <dd class="details__value">
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-              Send a message
+              Enquire on WhatsApp
               <span class="visually-hidden">(opens WhatsApp)</span>
             </a>
             {isPlaceholder('whatsapp') && <span class="details__flag">Placeholder</span>}
@@ -59,10 +59,7 @@ const isPlaceholder = (field: string) => placeholderContactDetails.includes(fiel
         </div>
       </dl>
 
-      <p class="details__note">
-        Contact details are development placeholders. A general enquiry form that
-        generates a WhatsApp message is planned for a later phase.
-      </p>
+      <p class="details__note">{placeholderNotice}</p>
     </div>
   </section>
 

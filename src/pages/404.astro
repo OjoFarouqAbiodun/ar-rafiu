@@ -5,7 +5,7 @@ import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
 import { primaryNavigation } from '../data/navigation';
 import { company } from '../data/company';
 
-const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General enquiry' }));
+const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
 ---
 
 <BaseLayout
@@ -13,7 +13,6 @@ const whatsappHref = buildWhatsAppLink(buildEnquiryMessage({ Interest: 'General 
   description="The page you were looking for could not be found on the Ar-Rafiu Integrated Services Limited website."
 >
   <PageHeader
-    eyebrow="Error 404"
     title="Page not found"
     intro="The page you were looking for is not here. It may have been moved, or the link may be incorrect."
   />

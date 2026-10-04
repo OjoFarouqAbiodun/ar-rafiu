@@ -2,39 +2,28 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
-import { services } from '../data/services';
+import { companySummary } from '../data/company';
 ---
 
 <BaseLayout
   title="About"
-  description="About Ar-Rafiu Integrated Services Limited, a supplier of IT equipment and provider of installation, maintenance, repair and replacement services."
+  description="About Ar-Rafiu Integrated Services Limited: the equipment categories it supplies and the installation, maintenance, repair and replacement services it provides."
 >
-  <PageHeader
-    eyebrow="The company"
-    title="About Ar-Rafiu"
-    intro="Ar-Rafiu Integrated Services Limited supplies IT equipment and technology, and provides installation, maintenance, repair and replacement."
-  />
+  <PageHeader title="About Ar-Rafiu" intro={companySummary} />
 
-  <section class="page-section" aria-label="Company information">
+  <section class="page-section" aria-label="About Ar-Rafiu">
     <div class="container">
       <div class="prose">
         <p>
-          The work the company carries out covers both new equipment and equipment
-          already in service. A single enquiry can cover a purchase, an installation,
-          a repair or an ongoing maintenance arrangement.
+          Equipment does not have to be new or have been supplied by Ar-Rafiu.
+          Installation, maintenance, repair and replacement are available for
+          equipment already in service.
         </p>
 
-        <h2>Service coverage</h2>
-        <ul>
-          {services.map((service) => <li>{service.name}</li>)}
-        </ul>
-
-        <h2>Company background</h2>
         <p>
-          Company history, founding information, locations, certifications,
-          partnerships and client details have not been provided by the company and
-          are therefore not stated here. This section will be completed with
-          confirmed information rather than placeholder claims.
+          A single enquiry can cover a purchase, an installation, a repair or
+          maintenance. Enquiries are sent on WhatsApp with the area of interest
+          already filled in, so the conversation stays in one place.
         </p>
       </div>
     </div>

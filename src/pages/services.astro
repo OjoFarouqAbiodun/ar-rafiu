@@ -6,19 +6,18 @@ import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 ---
 
 <BaseLayout
-  title="Services"
-  description="IT equipment installation, maintenance, repairs, replacement, CCTV and biometric installation, server solutions, IT support, software solutions and power backup from Ar-Rafiu Integrated Services Limited."
+  title="Installation, repairs & support"
+  description="Installation, maintenance, repair and replacement for IT equipment, plus CCTV, biometric, server, software and power backup work."
 >
   <PageHeader
     eyebrow="What we do"
     title="Services"
-    intro="Installation, maintenance and support for the equipment Ar-Rafiu supplies, and for equipment already in use."
+    intro="Installation, maintenance, repair and replacement for the equipment Ar-Rafiu supplies, and for equipment already in use. If you are unsure which service applies, describe the equipment and what it is doing, or not doing."
   />
 
   <section class="page-section" aria-label="Service list">
     <div class="container">
-      <h2 class="page-section__title">Service coverage</h2>
-      <ServiceList />
+      <ServiceList headingLevel={2} />
     </div>
   </section>
 

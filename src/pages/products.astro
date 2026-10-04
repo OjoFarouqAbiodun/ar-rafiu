@@ -6,19 +6,18 @@ import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 ---
 
 <BaseLayout
-  title="Products"
-  description="IT equipment and technology supplied by Ar-Rafiu Integrated Services Limited, including servers, server racks, computers, printers, photocopiers, CCTV, biometric systems, inverters and batteries."
+  title="Equipment and software"
+  description="Servers, server racks, computers, printers, photocopiers, CCTV systems, biometric machines, inverters and batteries supplied by Ar-Rafiu Integrated Services Limited."
 >
   <PageHeader
     eyebrow="Catalogue"
-    title="Products and equipment"
-    intro="The equipment areas Ar-Rafiu supplies. Availability and specification for any item can be confirmed through an enquiry."
+    title="Equipment and software"
+    intro="The equipment categories Ar-Rafiu supplies. If you are not sure which one you need, choose the closest match and say so in your enquiry. Specification and availability for any item are confirmed on enquiry."
   />
 
   <section class="page-section page-section--subtle" aria-label="Product catalogue">
     <div class="container">
-      <h2 class="page-section__title">Equipment categories</h2>
-      <EquipmentCatalogue />
+      <EquipmentCatalogue headingLevel={2} />
     </div>
   </section>
 

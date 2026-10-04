@@ -7,19 +7,18 @@ import ActionLink from '../ActionLink.astro';
   <div class="container">
     <div class="services__head">
       <div>
-        <p class="services__eyebrow">What we do</p>
-        <h2 class="services__title" id="services-title">Services</h2>
+        <h2 class="services__title" id="services-title">What Ar-Rafiu does</h2>
       </div>
       <p class="services__intro">
-        Installation and support cover the equipment listed above as well as
-        equipment already in use.
+        Installation, maintenance, repair and replacement, covered in more detail on
+        the services page.
       </p>
     </div>
 
     <ServiceList />
 
     <p class="services__actions">
-      <ActionLink href="/services" variant="secondary">Read about services</ActionLink>
+      <ActionLink href="/services" variant="secondary">See all services</ActionLink>
     </p>
   </div>
 </section>
@@ -37,16 +36,9 @@ import ActionLink from '../ActionLink.astro';
     margin-block-end: var(--space-xl);
   }
 
-  .services__eyebrow {
-    font-size: var(--step--1);
-    font-weight: var(--weight-semibold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-accent-text);
-  }
-
+  /* No top margin: the h2 opens the section now that the duplicated eyebrow has
+     been removed. */
   .services__title {
-    margin-block-start: var(--space-2xs);
     font-size: var(--step-4);
   }
 

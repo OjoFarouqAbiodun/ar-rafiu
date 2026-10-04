@@ -13,13 +13,19 @@ import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
 type ActionVariant = 'primary' | 'accent' | 'secondary' | 'quiet';
 
 interface Props {
-  details: Record<string, string>;
+  /**
+   * Optional. Supply a single labelled detail when the visitor has already chosen
+   * something specific, such as `{ Product: 'CCTV systems' }`. Omit it for general
+   * enquiries so the message asks what is needed rather than asserting an
+   * interest the visitor has not expressed.
+   */
+  details?: Record<string, string>;
   variant?: ActionVariant;
   externalLabel?: string;
   class?: string;
 }
 
-const { details, variant = 'primary', externalLabel, class: className } = Astro.props;
+const { details = {}, variant = 'primary', externalLabel, class: className } = Astro.props;
 
 const href = buildWhatsAppLink(buildEnquiryMessage(details));
 ---

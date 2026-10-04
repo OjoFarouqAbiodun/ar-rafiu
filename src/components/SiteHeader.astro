@@ -40,8 +40,8 @@ function isCurrent(href: string): boolean {
       <svg
         class="site-header__icon site-header__icon--open"
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="32"
+        height="32"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
@@ -49,22 +49,22 @@ function isCurrent(href: string): boolean {
         aria-hidden="true"
       >
         <path d="M3 6h18"></path>
-        <path d="M3 12h18"></path>
+        <path d="M6 12h12"></path>
         <path d="M3 18h18"></path>
       </svg>
       <svg
         class="site-header__icon site-header__icon--close"
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="32"
+        height="32"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
+        stroke-width="2.5"
         stroke-linecap="round"
         aria-hidden="true"
       >
-        <path d="M5 5l14 14"></path>
-        <path d="M19 5L5 19"></path>
+        <path d="M4.5 4.5l15 15"></path>
+        <path d="M19.5 4.5l-15 15"></path>
       </svg>
     </button>
 
@@ -86,7 +86,7 @@ function isCurrent(href: string): boolean {
       </ul>
 
       <div class="site-nav__enquiry">
-        <EnquiryLink details={{ Interest: 'General enquiry' }} variant="primary">
+        <EnquiryLink variant="primary">
           Enquire on WhatsApp
         </EnquiryLink>
       </div>
@@ -126,7 +126,13 @@ function isCurrent(href: string): boolean {
 
   /* Hidden until the script marks the header ready. Without JavaScript the
      navigation stays expanded, so a toggle that cannot work should not be
-     shown. */
+     shown.
+
+     The control is drawn as a bare glyph: no border, fill or background box,
+     so it reads as an icon rather than a button-shaped square. The 3rem
+     hit area (`--touch-target`, 48px) is kept by the box model rather than by
+     a visible frame, so removing the frame costs nothing for touch or
+     keyboard users. */
   .site-header__toggle {
     display: none;
     align-items: center;
@@ -135,8 +141,8 @@ function isCurrent(href: string): boolean {
     height: var(--touch-target);
     padding: 0;
     background-color: transparent;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-sm);
+    border: 0;
+    border-radius: 0;
     color: var(--color-primary);
   }
 
@@ -199,17 +205,45 @@ function isCurrent(href: string): boolean {
       display: inline-flex;
     }
 
+    /* The panel is a floating surface anchored to the bottom edge of the sticky
+       header rather than a wrapped flex row, so opening the menu overlays the
+       page instead of pushing the page heading down. It is inset by the same
+       gutter the shared container uses, so its edges line up with the content
+       above it. */
     [data-nav-ready='true'] .site-nav {
-      display: none;
-      flex-basis: 100%;
+      position: absolute;
+      inset-inline: var(--gutter);
+      top: 100%;
+      z-index: var(--z-raised);
       flex-direction: column;
       align-items: stretch;
-      gap: var(--space-2xs);
+      gap: var(--space-sm);
+      margin-block-start: var(--space-2xs);
       padding-block: var(--space-sm) var(--space-md);
+      padding-inline: var(--space-2xs);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      /* `visibility` rather than `display` so the panel can fade, and so its
+         links also leave the tab order while it is closed. `allow-discrete`
+         holds the panel visible for the length of the fade-out. Reduced motion
+         is already neutralised for every element in `base.css`. */
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-0.5rem);
+      pointer-events: none;
+      transition-property: opacity, transform, visibility;
+      transition-duration: var(--duration-base);
+      transition-timing-function: var(--ease-standard);
+      transition-behavior: allow-discrete;
     }
 
     [data-nav-ready='true'] .site-nav[data-open='true'] {
-      display: flex;
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
     }
 
     [data-nav-ready='true'] .site-nav__list {
@@ -219,8 +253,17 @@ function isCurrent(href: string): boolean {
     }
 
     [data-nav-ready='true'] .site-nav__link {
-      padding-block: var(--space-2xs);
+      padding: var(--space-sm);
       border-bottom: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    [data-nav-ready='true'] .site-nav__list li:last-child .site-nav__link {
+      border-bottom: 0;
+    }
+
+    [data-nav-ready='true'] .site-nav__link:hover {
+      background-color: var(--color-surface-subtle);
     }
 
     [data-nav-ready='true'] .site-nav__link[aria-current='page'] {

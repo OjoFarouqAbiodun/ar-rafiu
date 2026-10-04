@@ -21,6 +21,22 @@ export const company = {
 
 export type ContactDetailKey = keyof typeof company.contact;
 
+/**
+ * One-sentence statement of what the company is, used wherever a page needs to
+ * orient a visitor quickly. It is held here rather than restated per page so the
+ * wording cannot drift between the homepage, the about page and the footer.
+ */
+export const companySummary =
+  'Ar-Rafiu supplies IT equipment and technology, and provides installation, maintenance, repair and replacement.';
+
+/**
+ * Single wording for the placeholder disclosure. Three separate variants existed
+ * before the copy audit; one constant keeps them consistent and easy to delete
+ * once real contact details are confirmed.
+ */
+export const placeholderNotice =
+  'Contact details shown are placeholders and will be updated once confirmed.';
+
 /** Contact fields still holding temporary development values. */
 export const placeholderContactDetails: readonly ContactDetailKey[] = [
   'whatsapp',

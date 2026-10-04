@@ -1,6 +1,6 @@
 ---
 import EnquiryLink from '../EnquiryLink.astro';
-import { company, placeholderContactDetails } from '../../data/company';
+import { company, placeholderContactDetails, placeholderNotice } from '../../data/company';
 
 /**
  * Closing enquiry prompt.
@@ -19,16 +19,16 @@ const hasPlaceholders = placeholderContactDetails.length > 0;
   <div class="container closing__inner">
     <div class="closing__lead">
       <p class="closing__eyebrow">Next step</p>
-      <h2 class="closing__title" id="closing-title">Start an enquiry</h2>
+      <h2 class="closing__title" id="closing-title">Tell us what you need</h2>
       <p class="closing__text">
         Describe the equipment, service or fault you need help with, and include any
-        details you already have. Enquiries are handled through the company WhatsApp
-        contact.
+        details you already have. Existing equipment is fine to ask about, whether
+        or not it was supplied by Ar-Rafiu. Enquiries reach Ar-Rafiu on WhatsApp.
       </p>
     </div>
 
     <div class="closing__actions">
-      <EnquiryLink details={{ Interest: 'General enquiry' }} variant="accent">
+      <EnquiryLink variant="accent">
         Enquire on WhatsApp
       </EnquiryLink>
 
@@ -46,8 +46,7 @@ const hasPlaceholders = placeholderContactDetails.length > 0;
       {
         hasPlaceholders && (
           <p class="closing__note">
-            Contact details are development placeholders pending confirmation by the
-            company.
+            {placeholderNotice}
           </p>
         )
       }
