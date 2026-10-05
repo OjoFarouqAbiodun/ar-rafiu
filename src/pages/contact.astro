@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
 import {
@@ -25,8 +26,11 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
     intro="WhatsApp is the primary enquiry route. Phone and email are listed as alternatives."
   />
 
-  <section class="page-section" aria-label="Contact details">
+  <EnquiryForm fallbackHref={whatsappHref} />
+
+  <section class="page-section page-section--subtle" aria-label="Contact details">
     <div class="container">
+      <h2 class="page-section__title">Other ways to reach us</h2>
       <dl class="details">
         <div class="details__row">
           <dt class="details__label">WhatsApp</dt>

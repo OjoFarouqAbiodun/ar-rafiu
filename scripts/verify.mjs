@@ -325,7 +325,12 @@ async function connect() {
       awaitPromise: true,
     });
     if (response.result?.exceptionDetails) {
-      throw new Error(response.result.exceptionDetails.text);
+      // The bare `text` is just "Uncaught", which says nothing about which of a
+      // dozen statements failed, so the thrown value is preferred when present.
+      const details = response.result.exceptionDetails;
+      const description =
+        details.exception?.description ?? details.exception?.value ?? details.text;
+      throw new Error(String(description).split('\n').slice(0, 3).join(' '));
     }
     return response.result?.result?.value;
   }
@@ -392,11 +397,39 @@ async function connect() {
     return evaluate('return performance.getEntriesByType("navigation")[0]?.responseStatus ?? 0');
   }
 
+  /**
+   * Runs `action` while collecting CDP events with the given method.
+   *
+   * Needed for a navigation the page starts itself: once the new document is
+   * being fetched, nothing inside the old page can report what it asked for.
+   * `respond` is invoked per event so a request can be failed as it arrives,
+   * which is what keeps an outward navigation observable without leaving the
+   * machine. Bounded: it gives up waiting for the first event after `timeoutMs`.
+   */
+  async function capture(method, action, { respond, timeoutMs = STEP_TIMEOUT_MS } = {}) {
+    const events = [];
+    const listener = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.method !== method) return;
+      events.push(message.params);
+      if (respond) respond(message.params);
+    };
+    socket.addEventListener('message', listener);
+    try {
+      await action();
+      const deadline = Date.now() + timeoutMs;
+      while (events.length === 0 && Date.now() < deadline) await sleep(50);
+    } finally {
+      socket.removeEventListener('message', listener);
+    }
+    return events;
+  }
+
   function close() {
     socket.close();
   }
 
-  return { send, evaluate, goto, settle, waitFor, status, diagnostics, close };
+  return { send, evaluate, goto, settle, waitFor, status, capture, diagnostics, close };
 }
 
 // ---------------------------------------------------------------------------
@@ -977,6 +1010,343 @@ check('headings run in order with no skipped level', async ({ goto, evaluate }) 
       previous = level;
     }
   }
+  if (problems.length) throw new Error(problems.join(' | '));
+});
+
+// ---------------------------------------------------------------------------
+// General enquiry form
+// ---------------------------------------------------------------------------
+
+/** Fills one control the way a person would, then fires the events a person fires. */
+const ENQUIRY_FILL = `
+  window.__fillEnquiry = (name, value) => {
+    const el = document.querySelector('[data-enquiry-form] [name="' + name + '"]');
+    el.value = value;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  return true;
+`;
+
+/** Shared shape, labelling and state assertions for the form. */
+const ENQUIRY_SHAPE_PROBE = `
+  const form = document.querySelector('[data-enquiry-form]');
+  const root = document.querySelector('[data-enquiry-root]');
+  if (!form || !root) return { found: false };
+  const ids = (el) => (el.getAttribute('aria-describedby') || '').split(/\\s+/).filter(Boolean);
+  const text = (el) => (el ? el.textContent.replace(/\\s+/g, ' ').trim() : null);
+  const submit = form.querySelector('button[type="submit"]');
+  return {
+    found: true,
+    // Present because the browser's own bubbles are suppressed in favour of the
+    // custom messages, and absent action/method because submitting would post to
+    // the page itself.
+    novalidate: form.hasAttribute('novalidate'),
+    action: form.getAttribute('action'),
+    method: form.getAttribute('method'),
+    // The section is server-rendered hidden and revealed by the script, so this
+    // proves the form is actually presented once scripting is available.
+    revealed: !root.hidden && submit.checkVisibility(),
+    fields: [...form.querySelectorAll('input, select, textarea')].map((el) => ({
+      name: el.name,
+      required: el.required,
+      maxlength: el.getAttribute('maxlength'),
+      label: text(document.querySelector('label[for="' + el.id + '"]')),
+      describedBy: ids(el),
+      errorId: form.querySelector('[data-error-for="' + el.name + '"]')?.id ?? null,
+      // The error must exist and start hidden: an empty visible paragraph would
+      // read as a message with nothing in it.
+      errorHiddenAtLoad: form.querySelector('[data-error-for="' + el.name + '"]')?.hidden ?? null,
+    })),
+    helper: text(form.querySelector('[data-enquiry-helper]')),
+    submitLabel: text(submit),
+    // A confirmation the site cannot honestly make: there is no request to
+    // acknowledge, so a live region or status role would be a fabrication.
+    announcedStates: [...form.querySelectorAll('[aria-live], [role="status"], [role="alert"]')].length,
+    spinner: !!form.querySelector('[aria-busy]'),
+    options: [...form.querySelectorAll('select option')].map((o) => o.textContent.trim()),
+  };
+`;
+
+check('the enquiry form asks for exactly the agreed fields and claims no outcome', async ({ goto, evaluate }) => {
+  await goto('/contact/', 1280);
+  const state = await evaluate(ENQUIRY_SHAPE_PROBE);
+  if (!state.found) throw new Error('no enquiry form rendered on /contact/');
+
+  const problems = [];
+  if (!state.revealed) problems.push('form section still hidden with scripting available');
+
+  const required = state.fields.filter((f) => f.required).map((f) => f.name).sort();
+  const wantRequired = ['email', 'message', 'name', 'subject'];
+  if (required.join() !== wantRequired.join()) {
+    problems.push(`required fields are ${required.join()} or ${wantRequired.join()}`);
+  }
+
+  const message = state.fields.find((f) => f.name === 'message');
+  if (!message || message.maxlength !== '2000') {
+    problems.push(`message maxlength is ${message?.maxlength}, expected 2000`);
+  }
+
+  for (const field of state.fields) {
+    if (!field.label) problems.push(`${field.name} has no label`);
+    if (!field.errorId) problems.push(`${field.name} has no error element`);
+    else if (!field.describedBy.includes(field.errorId)) {
+      problems.push(`${field.name} aria-describedby ${field.describedBy.join(' ')} omits ${field.errorId}`);
+    }
+    if (field.errorHiddenAtLoad !== true) problems.push(`${field.name} error is not hidden at load`);
+  }
+
+  const WANT_HELPER =
+    "Your details will be used to prepare a WhatsApp enquiry. You'll review the message in WhatsApp before sending it.";
+  if (state.helper !== WANT_HELPER) problems.push(`helper copy reads "${state.helper}"`);
+
+  if (state.submitLabel !== 'Open WhatsApp with this enquiry') {
+    problems.push(`submit label reads "${state.submitLabel}"`);
+  }
+  if (!state.novalidate) problems.push('form does not suppress native validation bubbles');
+  if (state.action !== null || state.method !== null) {
+    problems.push(`form carries action="${state.action}" method="${state.method}", which would post to this page`);
+  }
+  if (state.announcedStates) problems.push('form announces a live region it cannot honestly report');
+  if (state.spinner) problems.push('form carries a busy indicator with no request to wait for');
+
+  if (!state.options.includes('Another requirement')) {
+    problems.push('select has no "Another requirement" option');
+  }
+  const placeholder = state.options[0];
+  if (placeholder !== 'Choose a product or service') {
+    problems.push(`select opens on "${placeholder}" instead of a prompt`);
+  }
+
+  if (problems.length) throw new Error(problems.join(' | '));
+});
+
+check('an empty enquiry is explained field by field and does not submit', async ({ goto, evaluate }) => {
+  await goto('/contact/', 1280);
+  await evaluate(ENQUIRY_FILL);
+  await evaluate(`document.querySelector('[data-enquiry-form]').requestSubmit(); return true;`);
+
+  const state = await evaluate(`
+    const form = document.querySelector('[data-enquiry-form]');
+    return {
+      errors: [...form.querySelectorAll('[data-error-for]')].map((el) => ({
+        name: el.dataset.errorFor,
+        shown: !el.hidden,
+        text: el.textContent.replace(/\\s+/g, ' ').trim(),
+        invalid: form.elements.namedItem(el.dataset.errorFor).getAttribute('aria-invalid'),
+      })),
+      focused: document.activeElement ? document.activeElement.name : null,
+      // A prevented submit leaves the document alone; a real one would have
+      // navigated and lost this page entirely.
+      navigationCount: performance.getEntriesByType('navigation').length,
+      pathname: location.pathname,
+    };
+  `);
+
+  const problems = [];
+  for (const name of ['name', 'email', 'subject', 'message']) {
+    const error = state.errors.find((e) => e.name === name);
+    if (!error?.shown) problems.push(`${name} error not shown`);
+    else if (!error.text) problems.push(`${name} error shown but empty`);
+    if (error?.invalid !== 'true') problems.push(`${name} not marked aria-invalid`);
+  }
+  // Phone is optional, so an empty value must not be reported as a problem.
+  const phone = state.errors.find((e) => e.name === 'phone');
+  if (phone?.shown) problems.push('optional phone reported an error when left empty');
+  if (phone?.invalid) problems.push('optional phone marked aria-invalid when left empty');
+
+  if (state.focused !== 'name') problems.push(`focus moved to "${state.focused}" instead of the first invalid field`);
+  if (state.navigationCount !== 1) problems.push(`${state.navigationCount} navigation entries, form may have submitted`);
+  if (state.pathname !== '/contact/') problems.push(`form submitted and left the page: ${state.pathname}`);
+
+  if (problems.length) throw new Error(problems.join(' | '));
+});
+
+check('a malformed email and phone are refused with guidance and nothing is cleared', async ({ goto, evaluate }) => {
+  await goto('/contact/', 1280);
+  await evaluate(ENQUIRY_FILL);
+
+  // Filling, submitting and reading back are separate round trips so a failure
+  // names the step that broke rather than the whole form.
+  await evaluate(`
+    window.__fillEnquiry('name', 'Amina Bello');
+    window.__fillEnquiry('email', 'amina(at)example.com');
+    window.__fillEnquiry('phone', 'call me');
+    window.__fillEnquiry('subject', 'CCTV systems');
+    window.__fillEnquiry('message', 'One camera by the gate.');
+    return true;
+  `);
+  await evaluate(`document.querySelector('[data-enquiry-form]').requestSubmit(); return true;`);
+
+  const state = await evaluate(`
+    const form = document.querySelector('[data-enquiry-form]');
+    const shown = (name) => {
+      const el = form.querySelector('[data-error-for="' + name + '"]');
+      return el.hidden ? null : el.textContent.replace(/\\s+/g, ' ').trim();
+    };
+    const value = (name) => form.elements.namedItem(name).value;
+    const invalid = (name) => form.elements.namedItem(name).getAttribute('aria-invalid');
+    return {
+      email: shown('email'),
+      phone: shown('phone'),
+      // The fields that were filled correctly must not be flagged.
+      nameInvalid: invalid('name'),
+      messageInvalid: invalid('message'),
+      subjectInvalid: invalid('subject'),
+      // Everything typed must survive a failed attempt.
+      nameValue: value('name'),
+      emailValue: value('email'),
+      phoneValue: value('phone'),
+      subjectValue: value('subject'),
+      messageValue: value('message'),
+      pathname: location.pathname,
+    };
+  `);
+
+  const problems = [];
+  if (!state.email) problems.push('malformed email accepted');
+  else if (!state.email.includes('name@example.com')) {
+    problems.push(`email error gives no example: "${state.email}"`);
+  }
+  if (!state.phone) problems.push('non-numeric phone accepted');
+  if (state.nameInvalid || state.subjectInvalid || state.messageInvalid) {
+    problems.push('valid fields were marked invalid');
+  }
+  const kept = {
+    name: 'Amina Bello',
+    email: 'amina(at)example.com',
+    phone: 'call me',
+    subject: 'CCTV systems',
+    message: 'One camera by the gate.',
+  };
+  for (const [field, expected] of Object.entries(kept)) {
+    if (state[`${field}Value`] !== expected) {
+      problems.push(`${field} was reset to "${state[`${field}Value`]}"`);
+    }
+  }
+  if (state.pathname !== '/contact/') problems.push(`form submitted and left the page: ${state.pathname}`);
+
+  if (problems.length) throw new Error(problems.join(' | '));
+});
+
+check('a valid enquiry opens WhatsApp carrying the details exactly as typed', async ({ goto, evaluate, send, capture }) => {
+  await goto('/contact/', 1280);
+
+  // The number is taken from the page's own direct link rather than hard-coded,
+  // so the form cannot quietly disagree with the rest of the site.
+  const reference = await evaluate(`
+    const link = [...document.querySelectorAll('a[href*="wa.me"]')][0];
+    return new URL(link.href).pathname;
+  `);
+  await evaluate(ENQUIRY_FILL);
+
+  await send('Fetch.enable', { patterns: [{ urlPattern: '*://wa.me/*', requestStage: 'Request' }] });
+
+  const fill = (phone) => `
+    window.__fillEnquiry('name', 'Amina Bello');
+    window.__fillEnquiry('email', 'amina@example.com');
+    ${phone ? `window.__fillEnquiry('phone', '${phone}');` : `window.__fillEnquiry('phone', '');`}
+    window.__fillEnquiry('subject', 'CCTV systems');
+    window.__fillEnquiry('message', 'One camera by the gate. Please quote for supply and installation.');
+    document.querySelector('[data-enquiry-form]').requestSubmit();
+    return true;
+  `;
+
+  /** Submits and returns the WhatsApp URL the page asked for, without dialling out. */
+  const submitAndCapture = async (phone) => {
+    // Each attempt starts from a fresh load: the first submission navigates away
+    // to WhatsApp, so the second would otherwise run against a replaced document.
+    await goto('/contact/', 1280);
+    await evaluate(ENQUIRY_FILL);
+    const events = await capture(
+      'Fetch.requestPaused',
+      async () => {
+        await evaluate(fill(phone));
+      },
+      {
+        respond: (params) => {
+          send('Fetch.failRequest', { requestId: params.requestId, errorReason: 'Failed' }).catch(() => {});
+        },
+      },
+    );
+    return events[0]?.request?.url ?? null;
+  };
+
+  try {
+    const problems = [];
+
+    const withPhone = await submitAndCapture('+234 800 111 2222');
+    if (!withPhone) throw new Error('a valid enquiry did not request any WhatsApp URL');
+
+    let url;
+    try {
+      url = new URL(withPhone);
+    } catch {
+      throw new Error(`WhatsApp URL was not a URL: ${withPhone}`);
+    }
+    if (url.origin !== 'https://wa.me') problems.push(`opened ${url.origin}, expected https://wa.me`);
+    if (url.pathname !== reference) {
+      problems.push(`dials ${url.pathname}, but the page's direct link dials ${reference}`);
+    }
+
+    const text = url.searchParams.get('text') ?? '';
+    const wanted = [
+      'Hello Ar-Rafiu Integrated Services Limited',
+      'from the Ar-Rafiu website',
+      'Name: Amina Bello',
+      'Email: amina@example.com',
+      'Phone: +234 800 111 2222',
+      'Product or service: CCTV systems',
+      'One camera by the gate. Please quote for supply and installation.',
+      'Thank you.',
+    ];
+    for (const line of wanted) {
+      if (!text.includes(line)) problems.push(`message omits "${line}"`);
+    }
+    // The shared helper used to end the sentence by appending a full stop to a
+    // message that already had one.
+    if (text.includes('..')) problems.push('message contains a doubled full stop');
+    // The message must round-trip: an encoded "&" that arrives as "&amp;" would
+    // arrive differently again inside WhatsApp.
+    if (/&amp;|&lt;|&gt;|\\u00/.test(text)) problems.push('message contains escaped markup rather than plain text');
+
+    // The same enquiry without a phone number must not mention one.
+    const withoutPhone = await submitAndCapture(null);
+    if (!withoutPhone) problems.push('the phone-free enquiry did not request a WhatsApp URL');
+    else if ((new URL(withoutPhone).searchParams.get('text') ?? '').includes('Phone:')) {
+      problems.push('a phone line appeared even though the field was left empty');
+    }
+
+    if (problems.length) throw new Error(problems.join(' | '));
+  } finally {
+    await send('Fetch.disable');
+  }
+});
+
+check('without scripting the form stays hidden and the direct WhatsApp link is offered', async () => {
+  // Read from the built file rather than disabling scripting in the browser: this
+  // is exactly what a visitor with JavaScript blocked is served, and asserting on
+  // it needs no risk of leaving script execution disabled for later checks.
+  const html = await readFile(join(DIST, 'contact', 'index.html'), 'utf8');
+  const problems = [];
+
+  const section = html.match(/<section class="enquiry"[^>]*>/)?.[0] ?? '';
+  if (!section.includes('data-enquiry-root')) problems.push('enquiry section not found in the built page');
+  if (!section.includes('hidden')) {
+    problems.push('enquiry section is not hidden in the served markup, so a dead form would be shown');
+  }
+
+  const noscript = html.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] ?? '';
+  if (!noscript) {
+    problems.push('no noscript fallback in the built page');
+  } else {
+    if (!/href="https:\/\/wa\.me\/\d+/.test(noscript)) {
+      problems.push('noscript fallback offers no direct WhatsApp link');
+    }
+    // A <noscript> block containing a form would be a form that cannot work.
+    if (/<form/i.test(noscript)) problems.push('noscript fallback renders a form');
+  }
+
   if (problems.length) throw new Error(problems.join(' | '));
 });
 

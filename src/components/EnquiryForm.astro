@@ -1,0 +1,292 @@
+---
+import ActionLink from './ActionLink.astro';
+import { equipmentEntries } from '../data/equipment';
+import { services } from '../data/services';
+
+/**
+ * General enquiry form.
+ *
+ * There is no backend. Submitting runs validation in the browser, composes a
+ * WhatsApp message from what was typed, and opens WhatsApp, where the visitor
+ * reads the message and decides whether to send it (PRD section 12). Nothing is
+ * sent to the site, so no success or confirmation state is shown: there is no
+ * request to wait for and no submission to acknowledge.
+ *
+ * The section ships hidden and is revealed by `initEnquiryForm`, the same
+ * arrangement the header uses for its collapsed panel. Without that, a form
+ * with no action would post the visitor's details back to this page's URL, so
+ * the served page offers the direct WhatsApp link instead, which needs no
+ * scripting at all.
+ */
+
+interface Props {
+  /** Shown when the form is unavailable, e.g. when scripting is blocked. */
+  fallbackHref: string;
+}
+
+const { fallbackHref } = Astro.props;
+
+// Equipment and services are the only product and service names the project
+// has (PRD sections 9.3 and 9.4), so the options come from those lists rather
+// than from a hand-written copy that could drift. "Another requirement" covers
+// the cases PRD section 9.6 expects that the catalogue does not name.
+const equipmentOptions = equipmentEntries.map((entry) => entry.name);
+const serviceOptions = services.map((service) => service.name);
+const otherOption = 'Another requirement';
+---
+
+<section class="enquiry" aria-labelledby="enquiry-title" data-enquiry-root hidden>
+  <div class="container enquiry__inner">
+    <div class="enquiry__lead">
+      <p class="enquiry__eyebrow">Enquiry</p>
+      <h2 class="enquiry__title" id="enquiry-title">Tell us what you need</h2>
+      <p class="enquiry__text">
+        Describe the equipment, service or fault you are asking about and include
+        any details you already have. Enquiries reach Ar-Rafiu on WhatsApp.
+      </p>
+    </div>
+
+    <form class="enquiry__form" data-enquiry-form novalidate>
+      <p class="enquiry__helper" data-enquiry-helper>
+        Your details will be used to prepare a WhatsApp enquiry. You'll review the
+        message in WhatsApp before sending it.
+      </p>
+
+      <div class="enquiry__fields">
+        <div class="field">
+          <label class="field__label" for="enquiry-name">Name</label>
+          <input
+            class="field__control"
+            id="enquiry-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            aria-describedby="enquiry-name-error"
+          />
+          <p class="field__error" id="enquiry-name-error" data-error-for="name" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="enquiry-email">Email</label>
+          <input
+            class="field__control"
+            id="enquiry-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            aria-describedby="enquiry-email-error"
+          />
+          <p class="field__error" id="enquiry-email-error" data-error-for="email" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="enquiry-phone">
+            Phone <span class="field__optional">Optional</span>
+          </label>
+          <input
+            class="field__control"
+            id="enquiry-phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            aria-describedby="enquiry-phone-error"
+          />
+          <p class="field__error" id="enquiry-phone-error" data-error-for="phone" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="enquiry-subject">Product or service</label>
+          <select
+            class="field__control"
+            id="enquiry-subject"
+            name="subject"
+            required
+            aria-describedby="enquiry-subject-error"
+          >
+            <option value="">Choose a product or service</option>
+            <optgroup label="Products">
+              {equipmentOptions.map((name) => <option value={name}>{name}</option>)}
+            </optgroup>
+            <optgroup label="Services">
+              {serviceOptions.map((name) => <option value={name}>{name}</option>)}
+            </optgroup>
+            <option value={otherOption}>{otherOption}</option>
+          </select>
+          <p class="field__error" id="enquiry-subject-error" data-error-for="subject" hidden></p>
+        </div>
+
+        <div class="field field--wide">
+          <label class="field__label" for="enquiry-message">Message</label>
+          <textarea
+            class="field__control field__control--multiline"
+            id="enquiry-message"
+            name="message"
+            rows="6"
+            maxlength="2000"
+            required
+            aria-describedby="enquiry-message-hint enquiry-message-error"
+          ></textarea>
+          <p class="field__hint" id="enquiry-message-hint">Up to 2000 characters.</p>
+          <p class="field__error" id="enquiry-message-error" data-error-for="message" hidden></p>
+        </div>
+      </div>
+
+      <button class="action action--accent enquiry__submit" type="submit">
+        Open WhatsApp with this enquiry
+      </button>
+    </form>
+  </div>
+
+  <noscript>
+    <div class="container enquiry__fallback">
+      <p class="enquiry__fallback-text">
+        The enquiry form needs JavaScript to open WhatsApp. You can still send an
+        enquiry directly on WhatsApp.
+      </p>
+      <ActionLink href={fallbackHref} variant="accent" external externalLabel="(opens WhatsApp)">
+        Enquire on WhatsApp
+      </ActionLink>
+    </div>
+  </noscript>
+</section>
+
+<style>
+  .enquiry {
+    padding-block: var(--space-2xl);
+  }
+
+  .enquiry__inner {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .enquiry__eyebrow {
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  .enquiry__title {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step-3);
+  }
+
+  .enquiry__text {
+    margin-block-start: var(--space-sm);
+    max-width: var(--measure);
+    color: var(--color-text-muted);
+  }
+
+  /* Stated once for the whole form rather than repeated per control, because
+     the requirement is a property of the set rather than of each field. */
+  .enquiry__helper {
+    max-width: var(--measure);
+    padding: var(--space-sm);
+    background-color: var(--color-surface-subtle);
+    border-inline-start: 2px solid var(--color-primary);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+
+  .enquiry__fields {
+    display: grid;
+    gap: var(--space-md);
+    margin-block-start: var(--space-lg);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .field__label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Optionality is a word rather than an asterisk, which would need explaining
+     and would be missed by anyone not reading closely. */
+  .field__optional {
+    font-weight: var(--weight-regular);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .field__control {
+    width: 100%;
+    min-height: var(--touch-target);
+    padding: var(--space-2xs) var(--space-sm);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    /* 16px on a mobile input, or iOS Safari zooms the viewport on focus. The
+       base font size is already fluid, so this only sets the floor. */
+    font-size: max(1rem, var(--step-0));
+  }
+
+  .field__control--multiline {
+    min-height: 0;
+    resize: vertical;
+    line-height: var(--leading-normal);
+  }
+
+  /* The error state is announced by aria-invalid as well as shown, so the red
+     is a reinforcement rather than the only cue. */
+  .field__control[aria-invalid='true'] {
+    border-color: var(--color-accent-text);
+    background-color: var(--color-accent-subtle);
+  }
+
+  .field__hint {
+    font-size: 0.75rem;
+    color: var(--color-text-subtle);
+  }
+
+  /* Errors sit on the subtle red surface, which the existing accent text colour
+     is already contrast-checked against (7.58:1). */
+  .field__error {
+    padding: var(--space-2xs) var(--space-sm);
+    background-color: var(--color-accent-subtle);
+    border-inline-start: 2px solid var(--color-accent-text);
+    font-size: var(--step--1);
+    color: var(--color-accent-text);
+  }
+
+  .enquiry__submit {
+    margin-block-start: var(--space-lg);
+  }
+
+.enquiry__fallback {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-lg);
+    max-width: var(--measure);
+  }
+
+  .enquiry__fallback-text {
+    color: var(--color-text-muted);
+  }
+
+  /* Name and email sit side by side only once there is room for them to be
+     readable; below that they stay full width. */
+  @media (min-width: 40rem) {
+    .enquiry__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field--wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
