@@ -3,11 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
-import { company, placeholderContactDetails, placeholderNotice } from '../data/company';
+import {
+  company,
+  placeholderContactDetails,
+  placeholderNotice,
+  type ContactDetailKey,
+} from '../data/company';
 
 const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
 const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
-const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
+const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.includes(field);
 ---
 
 <BaseLayout

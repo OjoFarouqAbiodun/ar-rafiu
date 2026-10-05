@@ -1,7 +1,13 @@
 ---
 import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
 import { primaryNavigation, isCurrentPath } from '../data/navigation';
-import { company, placeholderContactDetails, placeholderNotice, companySummary } from '../data/company';
+import {
+  company,
+  placeholderContactDetails,
+  placeholderNotice,
+  companySummary,
+  type ContactDetailKey,
+} from '../data/company';
 
 /**
  * Site footer.
@@ -16,7 +22,7 @@ const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
 const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
 const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
-const isPlaceholder = (field: string) => placeholderContactDetails.includes(field as never);
+const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.includes(field);
 ---
 
 <footer class="site-footer">

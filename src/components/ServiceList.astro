@@ -65,12 +65,16 @@ const formatted = services.map((service, index) => ({
     border-block-end: 1px solid var(--color-border);
   }
 
+  /* `--color-accent` measures 4.09:1 on white, which is below AA for text at
+     this size, so the numbers use `--color-accent-strong` (6.43:1) instead.
+     Size and weight are unchanged, so the numeral stays subordinate to the
+     service name beside it. */
   .service__number {
     font-family: var(--font-display);
     font-size: var(--step-1);
     font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
-    color: var(--color-accent);
+    color: var(--color-accent-strong);
     font-variant-numeric: tabular-nums;
   }
 
