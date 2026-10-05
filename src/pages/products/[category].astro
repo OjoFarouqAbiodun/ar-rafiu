@@ -31,7 +31,9 @@ interface Props {
 
 const { entry } = Astro.props;
 
-const description = `${entry.name} supplied by Ar-Rafiu Integrated Services Limited. ${entry.description}`;
+const description =
+  entry.metaDescription ??
+  `${entry.name} supplied by Ar-Rafiu Integrated Services Limited. ${entry.description}`;
 ---
 
 <BaseLayout title={entry.name} description={description}>

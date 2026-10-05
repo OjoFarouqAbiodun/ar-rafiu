@@ -6,8 +6,7 @@ import { buildGeneralEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
  * Deliberately tiny and framework-free: PRD section 21 asks for minimal
  * JavaScript. Each feature is a small `init*` function that returns immediately
  * when its markup is absent, so this stays a set of independent initialisers
- * rather than an application. Animation is handled separately in
- * `src/lib/motion`.
+ * rather than an application.
  */
 
 /**

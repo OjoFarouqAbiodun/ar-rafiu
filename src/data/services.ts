@@ -18,6 +18,13 @@ export interface Service {
   features?: readonly string[];
   /** Optional. Only factual, company-supplied use cases. */
   useCases?: readonly string[];
+  /**
+   * Optional override for the page's meta description, for the rare entry whose
+   * `description` makes the composed description run long. Unset means the route
+   * composes it as before. The visible description is never rewritten to suit
+   * search engines.
+   */
+  metaDescription?: string;
 }
 
 export const services: Service[] = [
@@ -50,6 +57,8 @@ export const services: Service[] = [
     id: 'biometric-installation',
     name: 'Biometric system installation',
     description: 'Fitting biometric devices such as fingerprint readers and setting them up for access control.',
+    metaDescription:
+      'Biometric system installation from Ar-Rafiu: fitting fingerprint readers and other biometric devices and setting them up for access control.',
   },
   {
     id: 'server-solutions',
@@ -65,6 +74,8 @@ export const services: Service[] = [
     id: 'software-solutions',
     name: 'Software & application solutions',
     description: 'Software and applications. State the requirement when you enquire and it can be matched.',
+    metaDescription:
+      'Software and application solutions from Ar-Rafiu Integrated Services Limited. Describe the requirement when you enquire and it can be matched to it.',
   },
   {
     id: 'power-backup',

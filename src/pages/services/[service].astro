@@ -30,7 +30,9 @@ interface Props {
 
 const { service } = Astro.props;
 
-const description = `${service.name} from Ar-Rafiu Integrated Services Limited. ${service.description}`;
+const description =
+  service.metaDescription ??
+  `${service.name} from Ar-Rafiu Integrated Services Limited. ${service.description}`;
 ---
 
 <BaseLayout title={service.name} description={description}>

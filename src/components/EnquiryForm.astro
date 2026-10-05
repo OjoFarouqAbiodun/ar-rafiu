@@ -14,9 +14,13 @@ import { services } from '../data/services';
  *
  * The section ships hidden and is revealed by `initEnquiryForm`, the same
  * arrangement the header uses for its collapsed panel. Without that, a form
- * with no action would post the visitor's details back to this page's URL, so
- * the served page offers the direct WhatsApp link instead, which needs no
- * scripting at all.
+ * with no action would post the visitor's details back to this page's URL.
+ *
+ * The `<noscript>` fallback therefore sits *outside* that hidden section rather
+ * than inside it. `hidden` hides an element together with everything inside it,
+ * so a fallback nested within would be hidden too and could never be shown. Out
+ * here it is the only part of this component that a visitor without scripting
+ * sees, and it offers the direct WhatsApp link, which needs no scripting at all.
  */
 
 interface Props {
@@ -138,19 +142,19 @@ const otherOption = 'Another requirement';
       </button>
     </form>
   </div>
-
-  <noscript>
-    <div class="container enquiry__fallback">
-      <p class="enquiry__fallback-text">
-        The enquiry form needs JavaScript to open WhatsApp. You can still send an
-        enquiry directly on WhatsApp.
-      </p>
-      <ActionLink href={fallbackHref} variant="accent" external externalLabel="(opens WhatsApp)">
-        Enquire on WhatsApp
-      </ActionLink>
-    </div>
-  </noscript>
 </section>
+
+<noscript>
+  <div class="container enquiry__fallback">
+    <p class="enquiry__fallback-text">
+      The enquiry form needs JavaScript to open WhatsApp. You can still send an
+      enquiry directly on WhatsApp.
+    </p>
+    <ActionLink href={fallbackHref} variant="accent" external externalLabel="(opens WhatsApp)">
+      Enquire on WhatsApp
+    </ActionLink>
+  </div>
+</noscript>
 
 <style>
   .enquiry {
@@ -266,11 +270,14 @@ const otherOption = 'Another requirement';
     margin-block-start: var(--space-lg);
   }
 
-.enquiry__fallback {
+  /* The fallback now stands on its own in the page flow instead of sitting
+     inside the enquiry section, so it carries that section's block padding to
+     occupy the same place the form would have. */
+  .enquiry__fallback {
     display: grid;
     justify-items: start;
     gap: var(--space-sm);
-    margin-block-start: var(--space-lg);
+    padding-block: var(--space-2xl);
     max-width: var(--measure);
   }
 

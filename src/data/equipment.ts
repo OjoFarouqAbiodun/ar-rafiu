@@ -28,6 +28,13 @@ export interface EquipmentCategory {
   features?: readonly string[];
   /** Optional. Only factual, company-supplied use cases. */
   useCases?: readonly string[];
+  /**
+   * Optional override for the page's meta description, for the rare entry whose
+   * `description` makes the composed description run long. Unset means the route
+   * composes it as before. The visible description is never rewritten to suit
+   * search engines.
+   */
+  metaDescription?: string;
 }
 
 export interface EquipmentGroup {
@@ -103,6 +110,8 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'inverters',
         name: 'Inverters',
         description: 'Inverters that turn stored battery power into mains electricity for equipment that needs a normal supply.',
+        metaDescription:
+          'Inverters supplied by Ar-Rafiu Integrated Services Limited, turning stored battery power into mains electricity for equipment that needs a normal supply.',
       },
       {
         id: 'batteries',
