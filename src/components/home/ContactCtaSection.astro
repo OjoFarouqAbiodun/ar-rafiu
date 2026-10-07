@@ -1,29 +1,40 @@
 ---
 import EnquiryLink from '../EnquiryLink.astro';
-import { company, placeholderContactDetails, placeholderNotice } from '../../data/company';
+import { company } from '../../data/company';
+import { buildWhatsAppChatLink } from '../../lib/whatsapp';
 
 /**
  * Closing enquiry prompt.
  *
  * WhatsApp is the primary route (PRD section 11), so it carries the only filled
- * accent control on a light background. Phone and email remain visible as
- * alternatives, per PRD section 30's requirement that other contact information
- * stays available.
+ * accent control on a light background. The number, phone, email and address
+ * stay visible as well, per PRD section 30's requirement that other contact
+ * information remains available.
+ *
+ * The heading and paragraph are overridable: on the contact page they would
+ * otherwise repeat the enquiry form's own lead word for word.
  */
 
-const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
-const hasPlaceholders = placeholderContactDetails.length > 0;
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Tell us what you need',
+  text = 'Describe the equipment, service or fault you need help with, and include any details you already have. Existing equipment is fine to ask about, whether or not it was supplied by Ar-Rafiu. Enquiries reach Ar-Rafiu on WhatsApp.',
+} = Astro.props;
+
+const chatHref = buildWhatsAppChatLink();
 ---
 
 <section class="closing" aria-labelledby="closing-title">
   <div class="container closing__inner">
     <div class="closing__lead">
       <p class="closing__eyebrow">Next step</p>
-      <h2 class="closing__title" id="closing-title">Tell us what you need</h2>
+      <h2 class="closing__title" id="closing-title">{title}</h2>
       <p class="closing__text">
-        Describe the equipment, service or fault you need help with, and include any
-        details you already have. Existing equipment is fine to ask about, whether
-        or not it was supplied by Ar-Rafiu. Enquiries reach Ar-Rafiu on WhatsApp.
+        {text}
       </p>
     </div>
 
@@ -34,22 +45,25 @@ const hasPlaceholders = placeholderContactDetails.length > 0;
 
       <ul class="closing__alternatives">
         <li>
+          <span class="closing__label">WhatsApp</span>
+          <a href={chatHref} target="_blank" rel="noopener noreferrer">
+            {company.contact.whatsappDisplay}
+            <span class="visually-hidden">(opens WhatsApp)</span>
+          </a>
+        </li>
+        <li>
           <span class="closing__label">Phone</span>
-          <a href={phoneHref}>{company.contact.phone}</a>
+          <a href={`tel:${company.contact.phone}`}>{company.contact.phoneDisplay}</a>
         </li>
         <li>
           <span class="closing__label">Email</span>
           <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
         </li>
+        <li>
+          <span class="closing__label">Address</span>
+          <span>{company.contact.address}</span>
+        </li>
       </ul>
-
-      {
-        hasPlaceholders && (
-          <p class="closing__note">
-            {placeholderNotice}
-          </p>
-        )
-      }
     </div>
   </div>
 </section>
@@ -123,12 +137,6 @@ const hasPlaceholders = placeholderContactDetails.length > 0;
     align-items: center;
     min-height: var(--touch-target);
     color: var(--color-primary);
-  }
-
-  .closing__note {
-    font-size: var(--step--1);
-    color: var(--color-text-subtle);
-    max-width: 44ch;
   }
 
   @media (min-width: 64rem) {

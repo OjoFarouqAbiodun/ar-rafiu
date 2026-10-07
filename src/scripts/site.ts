@@ -116,14 +116,14 @@ function initEnquiryForm(): void {
       input: form.elements.namedItem('name') as HTMLInputElement,
       error: fieldError('name') as HTMLElement,
       validate: (value) =>
-        value.trim() ? null : 'Enter your name so the enquiry reaches you.',
+        value.trim() ? null : 'Enter your name so Ar-Rafiu knows who is asking.',
     },
     {
       input: form.elements.namedItem('email') as HTMLInputElement,
       error: fieldError('email') as HTMLElement,
       validate: (value) => {
         const trimmed = value.trim();
-        if (!trimmed) return 'Enter your email address so the enquiry reaches you.';
+        if (!trimmed) return 'Enter your email address so it can be included in the enquiry.';
         if (!EMAIL_PATTERN.test(trimmed)) {
           return 'Enter an email address in the format name@example.com.';
         }

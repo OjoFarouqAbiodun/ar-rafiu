@@ -3,21 +3,21 @@ import { company } from '../data/company';
 /**
  * Builds the enquiry body defined in PRD section 10. Callers pass the labelled
  * details relevant to the enquiry, for example `{ Product: 'Rack Server' }` on a
- * product page or `{ Service: 'CCTV Installation' }` on a service page.
+ * product page or `{ Service: 'CCTV Installation' }` on a service page; each
+ * detail becomes a labelled line of its own, as in the PRD's example message.
  *
  * General enquiries pass nothing, so the message asks what the visitor needs
  * instead of asserting an interest they have not expressed.
  */
 export function buildEnquiryMessage(details: Record<string, string> = {}): string {
-  const subject = Object.entries(details)
-    .map(([label, value]) => `${label}: ${value}`)
-    .join(', ');
+  const lines = Object.entries(details).map(([label, value]) => `${label}: ${value}`);
 
   return [
     `Hello ${company.legalName},`,
-    subject
-      ? `I would like to ask about ${subject}.`
+    lines.length
+      ? 'I would like to ask about:'
       : 'I would like to ask about your equipment or services.',
+    ...(lines.length ? [lines.join('\n')] : []),
     'Please let me know what details you need from me.',
     'Thank you.',
   ].join('\n\n');
@@ -41,11 +41,10 @@ export interface GeneralEnquiry {
 /**
  * Message for an enquiry composed from the contact form.
  *
- * `buildEnquiryMessage` folds its details into a single sentence, which reads
- * correctly for one product or service but not for a form: the visitor's own
- * free-text message ends up buried mid-sentence and picks up a second full stop.
- * This builds the same greeting and sign-off with the details on their own
- * lines, so the message reads as what it is.
+ * The greeting and sign-off match `buildEnquiryMessage`, but the body keeps the
+ * visitor's own details on their own lines: a form supplies more fields than a
+ * product or service link, and folding them into prose would bury the
+ * free-text message mid-sentence.
  *
  * The line opening the body states that the enquiry came from the website,
  * because the recipient receives it in WhatsApp with no other context. Phone is
@@ -75,4 +74,12 @@ export function buildGeneralEnquiryMessage(enquiry: GeneralEnquiry): string {
  */
 export function buildWhatsAppLink(message: string): string {
   return `https://wa.me/${company.contact.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
+/**
+ * WhatsApp deep link with no message attached, for places that show the number
+ * itself rather than offering a pre-composed enquiry.
+ */
+export function buildWhatsAppChatLink(): string {
+  return `https://wa.me/${company.contact.whatsapp}`;
 }

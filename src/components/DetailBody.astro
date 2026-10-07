@@ -110,11 +110,11 @@ const hasDetailData = hasFeatures || hasUseCases;
 
   {
     !hasDetailData && (
-      <section class="detail__section" aria-labelledby="detail-specification-title">
-        <h2 class="detail__section-title" id="detail-specification-title">Specification</h2>
+      <section class="detail__section" aria-labelledby="detail-pending-title">
+        <h2 class="detail__section-title" id="detail-pending-title">Confirmed on enquiry</h2>
         <p class="detail__pending">
-          Need specifications or current availability? Ask us on WhatsApp and we’ll confirm
-          the details.
+          Specifications, availability and other details are confirmed on WhatsApp
+          rather than listed here.
         </p>
       </section>
     )
@@ -195,9 +195,9 @@ const hasDetailData = hasFeatures || hasUseCases;
     font-size: var(--step-0);
   }
 
-  /* Stands in for the specification and availability sections until confirmed
-     facts arrive. Kept in the same muted register as the supporting text
-     elsewhere on the page, and worded so it cannot be read as an Ar-Rafiu claim. */
+  /* The stand-in until confirmed facts arrive: it points at WhatsApp rather than
+     inventing values, and stays in the same muted register as the supporting text
+     elsewhere on the page so it cannot be read as an Ar-Rafiu claim. */
   .detail__pending {
     margin-block-start: var(--space-2xs);
     max-width: var(--measure);

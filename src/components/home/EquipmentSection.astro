@@ -1,6 +1,6 @@
 ---
 import EquipmentCatalogue from '../EquipmentCatalogue.astro';
-import PlaceholderMedia from '../PlaceholderMedia.astro';
+
 import ActionLink from '../ActionLink.astro';
 
 /**
@@ -22,7 +22,13 @@ import ActionLink from '../ActionLink.astro';
       </p>
 
       <div class="equipment__media">
-        <PlaceholderMedia label="Server and IT equipment" ratio="4 / 5" />
+        <img
+          class="equipment__image"
+          src="/assets/images/homepage-server-it-equipment.jpg"
+          alt="Server and IT equipment"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
       <p class="equipment__actions">
@@ -69,6 +75,16 @@ import ActionLink from '../ActionLink.astro';
   .equipment__media {
     margin-block-start: var(--space-lg);
     max-width: 22rem;
+  }
+
+  .equipment__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-muted);
   }
 
   .equipment__actions {

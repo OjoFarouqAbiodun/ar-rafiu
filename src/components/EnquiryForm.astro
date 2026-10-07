@@ -2,6 +2,7 @@
 import ActionLink from './ActionLink.astro';
 import { equipmentEntries } from '../data/equipment';
 import { services } from '../data/services';
+import { company } from '../data/company';
 
 /**
  * General enquiry form.
@@ -47,12 +48,13 @@ const otherOption = 'Another requirement';
       <p class="enquiry__text">
         Describe the equipment, service or fault you are asking about and include
         any details you already have. Enquiries reach Ar-Rafiu on WhatsApp.
+        Business hours are {company.contact.businessHours}.
       </p>
     </div>
 
     <form class="enquiry__form" data-enquiry-form novalidate>
       <p class="enquiry__helper" data-enquiry-helper>
-        Your details will be used to prepare a WhatsApp enquiry. You'll review the
+        Your details will be used to prepare a WhatsApp enquiry. You’ll review the
         message in WhatsApp before sending it.
       </p>
 

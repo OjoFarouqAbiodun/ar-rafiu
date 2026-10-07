@@ -3,51 +3,43 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import ContactCtaSection from '../components/home/ContactCtaSection.astro';
-import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
-import {
-  company,
-  placeholderContactDetails,
-  placeholderNotice,
-  type ContactDetailKey,
-} from '../data/company';
+import { buildEnquiryMessage, buildWhatsAppChatLink, buildWhatsAppLink } from '../lib/whatsapp';
+import { company } from '../data/company';
 
 const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
-const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
-const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.includes(field);
+const chatHref = buildWhatsAppChatLink();
 ---
 
 <BaseLayout
   title="Contact"
-  description="Contact Ar-Rafiu Integrated Services Limited. WhatsApp is the primary enquiry route, with phone and email also available."
+  description="Contact Ar-Rafiu Integrated Services Limited on WhatsApp, phone or email, with the address in Odongunyan, Ikorodu and business hours of 8am to 4pm."
 >
   <PageHeader
     eyebrow="Enquiries"
     title="Contact Ar-Rafiu"
-    intro="WhatsApp is the primary enquiry route. Phone and email are listed as alternatives."
+    intro="WhatsApp is the primary enquiry route. Phone, email, address, business hours and the area covered are listed below."
   />
 
   <EnquiryForm fallbackHref={whatsappHref} />
 
   <section class="page-section page-section--subtle" aria-label="Contact details">
     <div class="container">
-      <h2 class="page-section__title">Other ways to reach us</h2>
+      <h2 class="page-section__title">Contact details</h2>
       <dl class="details">
         <div class="details__row">
           <dt class="details__label">WhatsApp</dt>
           <dd class="details__value">
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-              Enquire on WhatsApp
+            <a href={chatHref} target="_blank" rel="noopener noreferrer">
+              {company.contact.whatsappDisplay}
               <span class="visually-hidden">(opens WhatsApp)</span>
             </a>
-            {isPlaceholder('whatsapp') && <span class="details__flag">Placeholder</span>}
           </dd>
         </div>
 
         <div class="details__row">
           <dt class="details__label">Phone</dt>
           <dd class="details__value">
-            <a href={phoneHref}>{company.contact.phone}</a>
-            {isPlaceholder('phone') && <span class="details__flag">Placeholder</span>}
+            <a href={`tel:${company.contact.phone}`}>{company.contact.phoneDisplay}</a>
           </dd>
         </div>
 
@@ -55,7 +47,6 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
           <dt class="details__label">Email</dt>
           <dd class="details__value">
             <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
-            {isPlaceholder('email') && <span class="details__flag">Placeholder</span>}
           </dd>
         </div>
 
@@ -63,16 +54,30 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
           <dt class="details__label">Address</dt>
           <dd class="details__value">
             <span>{company.contact.address}</span>
-            {isPlaceholder('address') && <span class="details__flag">Placeholder</span>}
+          </dd>
+        </div>
+
+        <div class="details__row">
+          <dt class="details__label">Business hours</dt>
+          <dd class="details__value">
+            <span>{company.contact.businessHours}</span>
+          </dd>
+        </div>
+
+        <div class="details__row">
+          <dt class="details__label">Service area</dt>
+          <dd class="details__value">
+            <span>{company.contact.serviceArea}</span>
           </dd>
         </div>
       </dl>
-
-      <p class="details__note">{placeholderNotice}</p>
     </div>
   </section>
 
-  <ContactCtaSection />
+  <ContactCtaSection
+    title="Message Ar-Rafiu directly"
+    text="Skip the form and open a chat on WhatsApp. Existing equipment is fine to ask about, whether or not it was supplied by Ar-Rafiu, and the reply comes back on WhatsApp."
+  />
 </BaseLayout>
 
 <style>
@@ -109,25 +114,6 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
     min-height: var(--touch-target);
     font-size: var(--step-1);
     font-weight: var(--weight-medium);
-  }
-
-  .details__flag {
-    display: inline-block;
-    padding: 0.0625rem var(--space-3xs);
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-xs);
-    font-size: 0.6875rem;
-    font-weight: var(--weight-medium);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-text-subtle);
-  }
-
-  .details__note {
-    margin-block-start: var(--space-lg);
-    max-width: var(--measure);
-    font-size: var(--step--1);
-    color: var(--color-text-subtle);
   }
 
   @media (min-width: 40rem) {

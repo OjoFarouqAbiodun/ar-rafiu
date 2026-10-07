@@ -1,28 +1,18 @@
 ---
-import { buildEnquiryMessage, buildWhatsAppLink } from '../lib/whatsapp';
+import { buildWhatsAppChatLink } from '../lib/whatsapp';
 import { primaryNavigation, isCurrentPath } from '../data/navigation';
-import {
-  company,
-  placeholderContactDetails,
-  placeholderNotice,
-  companySummary,
-  type ContactDetailKey,
-} from '../data/company';
+import { company, companySummary } from '../data/company';
 
 /**
  * Site footer.
  *
  * The surface stays light for the same reason as the header: the supplied logo
- * artwork is navy, so it cannot sit on a dark background. Contact fields that
- * still hold placeholder values are labelled as such, because PRD sections 24
- * and 25 forbid presenting temporary data as confirmed company information.
+ * artwork is navy, so it cannot sit on a dark background.
  */
 
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
-const whatsappHref = buildWhatsAppLink(buildEnquiryMessage());
-const phoneHref = `tel:${company.contact.phone.replace(/[^\d+]/g, '')}`;
-const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.includes(field);
+const chatHref = buildWhatsAppChatLink();
 ---
 
 <footer class="site-footer">
@@ -61,23 +51,19 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
       <h2 class="site-footer__heading">Contact</h2>
       <ul class="site-footer__list">
         <li>
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-            WhatsApp
+          <a href={chatHref} target="_blank" rel="noopener noreferrer">
+            {company.contact.whatsappDisplay}
             <span class="visually-hidden">(opens WhatsApp)</span>
           </a>
-          {isPlaceholder('whatsapp') && <span class="site-footer__flag">Placeholder</span>}
         </li>
         <li>
-          <a href={phoneHref}>{company.contact.phone}</a>
-          {isPlaceholder('phone') && <span class="site-footer__flag">Placeholder</span>}
+          <a href={`tel:${company.contact.phone}`}>{company.contact.phoneDisplay}</a>
         </li>
         <li>
           <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
-          {isPlaceholder('email') && <span class="site-footer__flag">Placeholder</span>}
         </li>
         <li>
           <span>{company.contact.address}</span>
-          {isPlaceholder('address') && <span class="site-footer__flag">Placeholder</span>}
         </li>
       </ul>
     </div>
@@ -85,7 +71,6 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
 
   <div class="container site-footer__legal">
     <p>&copy; {year} {company.legalName}</p>
-    <p class="site-footer__note">{placeholderNotice}</p>
     <p class="site-footer__credit">
       Made with <span aria-hidden="true">❤️</span> by
       <a
@@ -155,22 +140,6 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
     text-decoration-color: currentColor;
   }
 
-  /* Placeholder marking is textual, not a colour cue, so it survives a
-     monochrome or high-contrast rendering. */
-  .site-footer__flag {
-    display: inline-block;
-    margin-inline-start: var(--space-2xs);
-    padding: 0.0625rem var(--space-3xs);
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-xs);
-    font-size: 0.6875rem;
-    font-weight: var(--weight-medium);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-text-subtle);
-    vertical-align: middle;
-  }
-
   .site-footer__legal {
     display: flex;
     flex-wrap: wrap;
@@ -186,10 +155,6 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
     color: var(--color-text-muted);
   }
 
-  .site-footer__note {
-    max-width: 58ch;
-  }
-
   /* Left-aligned on mobile: the credit simply follows the copyright. An auto
      margin is deliberately not applied here, because on a wrapped line by
      itself it would absorb all the free space and push the credit to the right
@@ -199,7 +164,7 @@ const isPlaceholder = (field: ContactDetailKey) => placeholderContactDetails.inc
   }
 
   /* Tablet and up: pushed to the far edge so the credit sits opposite the
-     copyright rather than joining the notice text. */
+     copyright. */
   @media (min-width: 48rem) {
     .site-footer__credit {
       margin-inline-start: auto;

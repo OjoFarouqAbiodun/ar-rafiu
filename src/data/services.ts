@@ -14,6 +14,8 @@ export interface Service {
   id: string;
   name: string;
   description: string;
+  /** Optional until official photography exists (PRD section 27.10). */
+  image?: string;
   /** Optional. Only factual, company-supplied inclusions or capabilities. */
   features?: readonly string[];
   /** Optional. Only factual, company-supplied use cases. */
@@ -32,31 +34,37 @@ export const services: Service[] = [
     id: 'installation',
     name: 'IT equipment installation',
     description: 'Setting up and connecting IT equipment so it is ready to use.',
+    image: '/assets/services/technician-installing-network-equipment.jpg',
   },
   {
     id: 'maintenance',
     name: 'Equipment maintenance',
     description: 'Maintenance carried out on equipment to keep it working reliably.',
+    image: '/assets/services/it-maintenance-technician.jpg',
   },
   {
     id: 'repairs',
     name: 'Equipment repairs',
     description: 'Finding the cause of a fault and repairing equipment that has stopped working properly.',
+    image: '/assets/services/laptop-repair-workbench.jpg',
   },
   {
     id: 'replacement',
     name: 'Equipment replacement',
     description: 'Replacing equipment that has reached the end of its useful life.',
+    image: '/assets/services/replacing-computer-components.jpg',
   },
   {
     id: 'cctv-installation',
     name: 'CCTV installation',
     description: 'Fitting and connecting camera systems, and setting them up for the area being monitored.',
+    image: '/assets/services/cctv-camera-installation.jpg',
   },
   {
     id: 'biometric-installation',
     name: 'Biometric system installation',
     description: 'Fitting biometric devices such as fingerprint readers and setting them up for access control.',
+    image: '/assets/services/biometric-access-terminal.jpg',
     metaDescription:
       'Biometric system installation from Ar-Rafiu: fitting fingerprint readers and other biometric devices and setting them up for access control.',
   },
@@ -64,16 +72,19 @@ export const services: Service[] = [
     id: 'server-solutions',
     name: 'Server solutions',
     description: 'Server hardware, racking and the physical setup around them.',
+    image: '/assets/services/server-room-networking.jpg',
   },
   {
     id: 'it-support',
     name: 'IT support',
     description: 'Troubleshooting problems with IT equipment and the technology around it.',
+    image: '/assets/services/it-support-helpdesk.jpg',
   },
   {
     id: 'software-solutions',
     name: 'Software & application solutions',
     description: 'Software and applications. State the requirement when you enquire and it can be matched.',
+    image: '/assets/services/business-software-on-screen.jpg',
     metaDescription:
       'Software and application solutions from Ar-Rafiu Integrated Services Limited. Describe the requirement when you enquire and it can be matched to it.',
   },
@@ -81,11 +92,13 @@ export const services: Service[] = [
     id: 'power-backup',
     name: 'Power backup solutions',
     description: 'Inverter and battery systems for when the mains supply is interrupted.',
+    image: '/assets/services/uninterruptible-power-supply.jpg',
   },
   {
     id: 'other-technology',
     name: 'Other technology services',
     description: 'Other technology equipment and services, raised through the same enquiry route.',
+    image: '/assets/services/technology-equipment-workspace.jpg',
   },
 ];
 

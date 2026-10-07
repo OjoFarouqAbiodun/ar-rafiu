@@ -745,20 +745,17 @@ check('Escape closes the panel and returns focus to the toggle', async ({ goto, 
 
 check('footer legal row stacks left-aligned on mobile and opposes on wide', async ({ goto, evaluate }) => {
   const problems = [];
-  const NOTICE = 'Contact details shown are placeholders and will be updated once confirmed.';
 
   for (const width of [320, 375, 767]) {
     await goto('/about/', width);
     const state = await evaluate(`
       const legal = document.querySelector('.site-footer__legal');
-      const note = legal.querySelector('.site-footer__note');
       const credit = legal.querySelector('.site-footer__credit');
       const style = getComputedStyle(legal);
       const l = legal.getBoundingClientRect();
       const c = credit.getBoundingClientRect();
       const copyright = legal.firstElementChild.getBoundingClientRect();
       return {
-        notice: note ? note.textContent.trim() : null,
         alignItems: style.alignItems,
         flexWrap: style.flexWrap,
         creditMarginStart: getComputedStyle(credit).marginInlineStart,
@@ -771,7 +768,6 @@ check('footer legal row stacks left-aligned on mobile and opposes on wide', asyn
       };
     `);
 
-    if (state.notice !== NOTICE) problems.push(`${width}px notice text changed: ${state.notice}`);
     if (!state.linkedin) problems.push(`${width}px LinkedIn link missing`);
     if (state.flexWrap === 'nowrap') problems.push(`${width}px flex-wrap disabled`);
 
@@ -794,88 +790,37 @@ check('footer legal row stacks left-aligned on mobile and opposes on wide', asyn
     await goto('/about/', width);
     const state = await evaluate(`
       const legal = document.querySelector('.site-footer__legal');
-      const note = legal.querySelector('.site-footer__note');
       const credit = legal.querySelector('.site-footer__credit');
       const style = getComputedStyle(legal);
       const l = legal.getBoundingClientRect();
       const c = credit.getBoundingClientRect();
       const copyright = legal.firstElementChild.getBoundingClientRect();
-      const n = note.getBoundingClientRect();
       const midpoints = (r) => r.top + r.height / 2;
       return {
-        notice: note ? note.textContent.trim() : null,
         alignItems: style.alignItems,
         flexWrap: style.flexWrap,
         creditMarginStart: getComputedStyle(credit).marginInlineStart,
         copyrightLeft: Math.round(copyright.left - l.left),
         creditRightGap: Math.round(l.right - c.right),
-        // The auto margin must keep the credit off the notice's line, whether it
-        // wraps onto its own line or shares one with the copyright.
-        // Vertical overlap alone is not "joined": at 1440px the credit sits on
-        // the notice's line but is separated from it by the auto margin. What
-        // matters is how much horizontal space separates them.
-        sharesNoticeLine: c.top < n.bottom && n.top < c.bottom,
-        noticeToCreditGap: Math.round(c.left - n.right),
         sameRowAsCopyright: Math.abs(copyright.top - c.top) < 2,
         verticalDelta: Math.round(Math.abs(midpoints(copyright) - midpoints(c))),
       };
     `);
-    if (state.notice !== NOTICE) problems.push(`${width}px notice text changed`);
     if (state.alignItems !== 'center') problems.push(`${width}px align-items ${state.alignItems}, expected center`);
     if (state.flexWrap === 'nowrap') problems.push(`${width}px flex-wrap disabled`);
-    // With the auto margin restored the credit is pushed away from the notice,
-    // which is what "opposite edge" means for a three-item row.
+    // With the auto margin restored the credit is pushed to the far edge, which
+    // is what "opposite" means for the row.
     if (state.creditMarginStart === '0px') problems.push(`${width}px credit auto margin not applied`);
-    // The copyright anchors the left and the credit anchors the right. At 768 and
-    // 1024 the long notice wraps, so the credit lands on its own line at the far
-    // edge; only when it shares a line with the copyright do their centres align.
+    // The copyright anchors the left and the credit anchors the right, and at
+    // these widths the two short items share one line, so their centres align.
+    if (!state.sameRowAsCopyright) problems.push(`${width}px copyright and credit not on one row`);
+    if (state.sameRowAsCopyright && state.verticalDelta > 2) {
+      problems.push(`${width}px credit centre ${state.verticalDelta}px off the copyright`);
+    }
     if (Math.abs(state.copyrightLeft) > 1) problems.push(`${width}px copyright ${state.copyrightLeft}px off left edge`);
     if (Math.abs(state.creditRightGap) > 1) {
       problems.push(`${width}px credit ${state.creditRightGap}px off the right edge`);
     }
-    // The column gap is var(--space-md) = 24px. Anything at or below that means the
-    // credit is sitting against the notice text rather than being pushed away.
-    if (state.sharesNoticeLine && state.noticeToCreditGap <= 24) {
-      problems.push(`${width}px credit only ${state.noticeToCreditGap}px from the notice text`);
-    }
-    if (state.sameRowAsCopyright && state.verticalDelta > 2) {
-      problems.push(`${width}px credit centre ${state.verticalDelta}px off the copyright`);
-    }
-  }
-
-  if (problems.length) throw new Error(problems.join(' | '));
-});
-
-check('legal row still aligns when the placeholder notice is absent', async ({ goto, evaluate }) => {
-  // The future state once real contact details replace the placeholders. The
-  // element is removed from the live DOM only; no source file is touched.
-  const problems = [];
-
-  for (const width of [768, 1024, 1440]) {
-    await goto('/about/', width);
-    const state = await evaluate(`
-      const note = document.querySelector('.site-footer__note');
-      note.remove();
-      const legal = document.querySelector('.site-footer__legal');
-      const credit = legal.querySelector('.site-footer__credit');
-      const first = legal.firstElementChild;
-      const l = legal.getBoundingClientRect();
-      const f = first.getBoundingClientRect();
-      const c = credit.getBoundingClientRect();
-      const midpoints = (r) => r.top + r.height / 2;
-      return {
-        alignItems: getComputedStyle(legal).alignItems,
-        sameRow: Math.abs(f.top - c.top) < 2,
-        verticalDelta: Math.round(Math.abs(midpoints(f) - midpoints(c))),
-        firstFlushLeft: Math.round(f.left - l.left),
-        creditRightGap: Math.round(l.right - c.right),
-      };
-    `);
-    if (state.alignItems !== 'center') problems.push(`${width}px align-items ${state.alignItems}`);
-    if (!state.sameRow) problems.push(`${width}px copyright and credit not on one row`);
-    if (state.verticalDelta > 2) problems.push(`${width}px vertical centres differ by ${state.verticalDelta}px`);
-    if (Math.abs(state.firstFlushLeft) > 1) problems.push(`${width}px copyright ${state.firstFlushLeft}px off left edge`);
-    if (Math.abs(state.creditRightGap) > 1) problems.push(`${width}px credit ${state.creditRightGap}px off right edge`);
   }
 
   if (problems.length) throw new Error(problems.join(' | '));
@@ -1097,7 +1042,7 @@ check('the enquiry form asks for exactly the agreed fields and claims no outcome
   }
 
   const WANT_HELPER =
-    "Your details will be used to prepare a WhatsApp enquiry. You'll review the message in WhatsApp before sending it.";
+    'Your details will be used to prepare a WhatsApp enquiry. You’ll review the message in WhatsApp before sending it.';
   if (state.helper !== WANT_HELPER) problems.push(`helper copy reads "${state.helper}"`);
 
   if (state.submitLabel !== 'Open WhatsApp with this enquiry') {

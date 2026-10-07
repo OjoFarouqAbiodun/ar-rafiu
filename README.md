@@ -4,8 +4,9 @@ Company website for Ar-Rafiu Integrated Services Limited, covering the IT
 equipment and technology it supplies and the installation, maintenance, repair
 and replacement services it provides.
 
-**Status:** V1. Contact details and imagery are still placeholders, and no
-production domain has been set.
+**Status:** V1. The contact details are the confirmed ones supplied by the
+company; product and service imagery is still placeholder, and no production
+domain has been set.
 
 Visitors reach the company through WhatsApp, so every product, service and
 contact path leads to a pre-filled WhatsApp enquiry.
@@ -67,7 +68,10 @@ src/
   styles/         fonts.css, tokens.css (design tokens), base.css.
 public/           Files copied verbatim, including robots.txt and assets/.
 scripts/
-  verify.mjs      Automated verification harness. See Verification below.
+  verify.mjs          Automated verification harness. See Verification below.
+  image-manifest.json The planned photography: one entry per image slot.
+  download-images.mjs Downloads the manifest entries. See Product and
+                      service imagery below.
 ```
 
 Pages are built from the structured data in `src/data`. Adding an equipment
@@ -76,22 +80,23 @@ relevant index page, and add it to the enquiry form's options.
 
 ## Updating company details
 
-The contact details currently in the site are **development placeholders**.
-They are all held in one place:
+The contact details are confirmed company information. They are all held in
+one place:
 
 ```text
 src/data/company.ts
 ```
 
-Replace the WhatsApp number, phone, email and address there once the real
-details are confirmed. That single edit updates every WhatsApp link, every
-telephone link and every email link across the site, because the pages read
-from this file rather than repeating the values.
+That file holds the WhatsApp number, the phone number, the email address, the
+business address, the business hours and the service area. A single edit there
+updates every WhatsApp link, telephone link and email link across the site —
+header, footer, contact page and enquiry form — because the pages read from
+this file rather than repeating the values.
 
-`company.ts` also lists which fields are still placeholders, and the site
-labels those fields visibly so temporary values are not presented as confirmed
-company information. Remove a field from that list once it holds real data.
-`placeholderNotice` is the sentence shown alongside them.
+Details the company has not supplied (history, founding year, certifications,
+registration numbers, partners, social accounts) are deliberately absent
+rather than filled in. Add them to the same file and the relevant page once
+the company provides them.
 
 ## Brand assets
 
@@ -111,7 +116,36 @@ Site colours are defined as tokens in `src/styles/tokens.css`.
 Product and service imagery is not supplied yet, so those pages show a
 labelled placeholder (`src/components/PlaceholderMedia.astro`). Replace those
 with official photography once it exists — do not fill them with stock or
-generated imagery presented as the company's own.
+generated imagery presented as the company's own. The plan for representative
+imagery in the meantime is described under Product and service imagery below.
+
+## Product and service imagery
+
+The photographs each page needs are planned in one file:
+
+```text
+scripts/image-manifest.json
+```
+
+Each entry names the slot (`id`), where the file will live (`target`, a path
+under `public/`), what the photograph must show (`subject`), and a search page
+on the source platform (`sourceUrl`). Selecting the photograph is a human
+step: review candidates against the entry's `subject`, then record the direct
+image URL in `imageUrl` and the photographer and photo page in `attribution`.
+
+Download the planned files with:
+
+```bash
+node scripts/download-images.mjs
+```
+
+The script downloads only from the licensed CDNs named in the manifest
+policy, validates the bytes before writing anything, never overwrites an
+existing file unless `--force` is given, and makes no network requests for
+entries whose `imageUrl` is still empty. It exits non-zero while any entry is
+missing or failed, so an incomplete set cannot pass unnoticed. Select photos
+according to PRD section 27 (representative imagery, not presented as the
+company's own, replaced when official photography arrives).
 
 ## Enquiries
 
