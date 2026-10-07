@@ -49,3 +49,13 @@ export function buildPageMeta({ title, description }: PageMeta): ResolvedPageMet
     },
   };
 }
+
+export function getCanonicalUrl(path: string): string | undefined {
+  // Return undefined if site URL is not configured (no domain decided yet).
+  // When site is set in astro.config.mjs, Astro's sitemap and layouts can use this.
+  const site = (import.meta as any).env?.SITE;
+  if (!site) return undefined;
+  const base = String(site).replace(/\/$/, '');
+  const slug = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${slug.replace(/\/$/, '') || '/'}`;
+}

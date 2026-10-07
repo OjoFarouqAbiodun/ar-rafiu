@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+
+# Sitemap will be added when site URL is configured.
+# Sitemap: https://example.com/sitemap.xml (placeholder for future use only)
