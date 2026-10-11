@@ -462,13 +462,31 @@ const OVERFLOW_PROBE = `
   };
 `;
 
-/** Every image must have actually decoded, not merely exist in the DOM. */
+/**
+ * Every image must have actually decoded, not merely exist in the DOM.
+ *
+ * Reading `complete`/`naturalWidth` synchronously races the load: a
+ * `loading="lazy"` image still below the fold reports `complete === false` at
+ * that instant even though it loads a moment later. `decode()` resolves once
+ * the image is genuinely decoded (starting the load if the image is lazy) and
+ * rejects when it cannot be decoded, so awaiting it removes the race while
+ * still surfacing a genuinely broken image. It is raced against a bounded
+ * timeout so a stalled request is reported as a failure rather than hanging the
+ * run (AGENTS.md 4.1). The timeout stays under the CDP call's own limit.
+ */
 const IMAGE_PROBE = `
-  return [...document.images].map(img => ({
-    src: img.getAttribute('src'),
-    alt: img.getAttribute('alt'),
-    complete: img.complete,
-    width: img.naturalWidth,
+  const timeoutMs = 4000;
+  return Promise.all([...document.images].map(async (img) => {
+    const src = img.getAttribute('src');
+    const alt = img.getAttribute('alt');
+    const outcome = await Promise.race([
+      img.decode().then(
+        () => 'decoded',
+        (error) => 'decode failed: ' + (error && error.name ? error.name : error),
+      ),
+      new Promise(resolve => setTimeout(() => resolve('decode timed out'), timeoutMs)),
+    ]);
+    return { src, alt, ok: outcome === 'decoded', outcome };
   }));
 `;
 
@@ -527,8 +545,8 @@ check('every image is decoded and has alt text', async ({ goto, evaluate }) => {
     await goto(route, 1280);
     const images = await evaluate(IMAGE_PROBE);
     for (const image of images) {
-      if (!image.complete || image.width === 0) {
-        throw new Error(`${route} image failed to load: ${image.src}`);
+      if (!image.ok) {
+        throw new Error(`${route} image failed to load: ${image.src} (${image.outcome})`);
       }
       if (image.alt === null) throw new Error(`${route} image missing alt: ${image.src}`);
     }

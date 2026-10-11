@@ -4,8 +4,8 @@ import { equipmentGroups } from '../data/equipment';
 /**
  * The equipment catalogue, shared by the homepage section and the products page.
  *
- * Rendered as a description list rather than cards: ten product lines as ten
- * boxes becomes an undifferentiated wall, whereas term/description pairs
+ * Rendered as a description list rather than cards: every product line as its
+ * own box becomes an undifferentiated wall, whereas term/description pairs
  * stay readable as a reference. Category names and one-line purposes are the
  * only claims made, since no specifications have been supplied (PRD section 24).
  *
@@ -103,8 +103,8 @@ const populatedGroups = equipmentGroups.filter((group) => group.categories.lengt
     color: var(--color-primary);
     font-weight: var(--weight-semibold);
     /* The underline colour carries the affordance instead of the text colour, so
-       a ten-item reference list stays readable while still reading as links.
-       Same treatment as the footer links. */
+       a reference list stays readable while still reading as links. Same
+       treatment as the footer links. */
     text-decoration: underline;
     text-decoration-color: var(--color-border-strong);
     text-underline-offset: 0.2em;

@@ -18,8 +18,8 @@ export interface EnquiryTopic {
 export const enquiryTopics: EnquiryTopic[] = [
   {
     id: 'compute',
-    label: 'Servers & infrastructure',
-    interest: 'Servers, server racks or computers',
+    label: 'Servers, computers & laptops',
+    interest: 'Servers, server racks, computers or laptops',
   },
   {
     id: 'security',
@@ -28,8 +28,8 @@ export const enquiryTopics: EnquiryTopic[] = [
   },
   {
     id: 'power',
-    label: 'Power backup',
-    interest: 'Inverters or batteries',
+    label: 'Solar & power',
+    interest: 'Solar panels, inverters, batteries, UPS or AVR stabilizers',
   },
   {
     id: 'print',
@@ -37,8 +37,13 @@ export const enquiryTopics: EnquiryTopic[] = [
     interest: 'Printers or photocopy machines',
   },
   {
+    id: 'network',
+    label: 'Networking, web & IT support',
+    interest: 'Networking, web design, software or IT support',
+  },
+  {
     id: 'support',
-    label: 'Repairs & maintenance',
-    interest: 'Maintenance, repairs or equipment replacement',
+    label: 'Installation, repairs & maintenance',
+    interest: 'Installation, maintenance, repairs or equipment replacement',
   },
 ];

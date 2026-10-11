@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/services/installation",
+      "destination": "/services/general-installation/",
+      "permanent": true
+    },
+    {
+      "source": "/services/installation/",
+      "destination": "/services/general-installation/",
+      "permanent": true
+    },
+    {
+      "source": "/services/maintenance",
+      "destination": "/services/general-installation/",
+      "permanent": true
+    },
+    {
+      "source": "/services/maintenance/",
+      "destination": "/services/general-installation/",
+      "permanent": true
+    }
+  ]
+}

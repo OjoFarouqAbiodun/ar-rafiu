@@ -34,24 +34,19 @@ The website should feel like a real business website rather than a generic templ
 
 Ar-Rafiu Integrated Services Limited provides IT equipment, technology solutions, installation, maintenance, repair, replacement, and related services.
 
-The company deals with areas including:
+The confirmed product and service catalogue is recorded in sections 9.2 and 9.3. In summary, the company deals with:
 
-* Servers
-* Server racks
-* Computers
-* Printers
-* Photocopy machines
-* Inverters
-* Batteries
-* Software/applications
-* CCTV systems
-* Biometric machines
-* Repairs
-* Equipment replacement
-* IT-related services and support
-* Other related technology equipment and services
+* Servers and server racks
+* Computers and laptops
+* Printers and photocopiers
+* CCTV systems and biometric machines
+* Networking equipment
+* Inverters, batteries, solar panels, UPS systems and AVR stabilizers
+* Software and applications
+* Installation, maintenance, repairs and equipment replacement
+* IT support, web design, hardware and software engineering, and other technology services
 
-The final list of products and services may be expanded or modified when the company provides the complete information.
+The list may be expanded or modified when the company provides further information.
 
 ---
 
@@ -295,19 +290,38 @@ The exact section arrangement should be determined by the content hierarchy rath
 
 A dedicated area for the company's technology equipment and solutions.
 
-Possible categories:
+Confirmed categories, grouped on the site:
+
+**Computers & infrastructure**
 
 * Servers
-* Server Racks
+* Server racks
 * Computers
+* Laptops
+
+**Print & document**
+
 * Printers
 * Photocopiers
+
+**Security & access control**
+
+* CCTV systems
+* Biometric machines
+
+**Power & solar**
+
 * Inverters
 * Batteries
-* CCTV
-* Biometric Systems
-* Applications/Software
-* Other IT Equipment
+* Solar panels
+* UPS systems
+* AVR stabilizers
+
+**Software & applications**
+
+* Applications
+
+Items that do not fit a listed category are raised through the "Other technology services" enquiry route (section 9.3).
 
 The structure should make it easy to add new product categories later.
 
@@ -317,21 +331,28 @@ The structure should make it easy to add new product categories later.
 
 A dedicated services section/page.
 
-Possible services:
+Confirmed services:
 
-* IT Equipment Installation
-* Equipment Maintenance
-* Equipment Repairs
-* Equipment Replacement
-* CCTV Installation
-* Biometric System Installation
-* Server Solutions
-* IT Support
-* Software/Application Solutions
-* Power Backup Solutions
-* Other Technology Services
+* General installation & maintenance
+* Equipment repairs
+* Equipment replacement
+* CCTV installation & maintenance
+* Solar & hybrid solar installation & management
+* Biometric system installation
+* Networking solutions
+* Server solutions
+* IT support
+* Hardware & software engineering
+* Software & application solutions
+* Web design
+* Laptop & desktop supply, services & maintenance
+* Solar panel & inverter supply
+* UPS solutions
+* AVR stabilizers
+* Power backup solutions
+* Other technology services
 
-The final service list must be updated when the company provides its official list.
+The list reflects the official set the company confirmed. The superseded `/services/installation/` and `/services/maintenance/` URLs are kept alive with permanent redirects to `/services/general-installation/`, and the list must be updated whenever the company changes it.
 
 ---
 

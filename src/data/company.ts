@@ -35,4 +35,4 @@ export const company = {
  * wording cannot drift between the homepage, the about page and the footer.
  */
 export const companySummary =
-  'Ar-Rafiu supplies IT equipment and technology, and provides installation, maintenance, repair and replacement.';
+  'Ar-Rafiu supplies IT, networking, solar and power equipment, and provides installation, maintenance, repair and support.';

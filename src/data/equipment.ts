@@ -4,7 +4,7 @@
  *
  * The grouping is the reason the data is shaped this way: PRD section 2 lists a
  * flat set of product lines, which rendered as a grid produces an undifferentiated
- * wall of ten items. Grouping lets the homepage present them as a handful of
+ * wall of items. Grouping lets the homepage present them as a handful of
  * readable domains.
  *
  * Only category-level information from PRD section 2 is recorded here. No
@@ -24,6 +24,13 @@ export interface EquipmentCategory {
   description: string;
   /** Optional until official product photography exists (PRD section 27.10). */
   image?: string;
+  /**
+   * Optional alt text describing what the photograph shows. Unset means the
+   * detail page falls back to the item name, which is the pre-existing
+   * behaviour. Set for entries whose photograph is representative stock, so the
+   * alt describes the visible subject rather than naming the page.
+   */
+  imageAlt?: string;
   /** Optional. Only factual, company-supplied feature statements. */
   features?: readonly string[];
   /** Optional. Only factual, company-supplied use cases. */
@@ -68,6 +75,13 @@ export const equipmentGroups: EquipmentGroup[] = [
         description: 'Desktop and workstation computers for staff use.',
         image: '/assets/products/computers/desktop-computer-workstation.jpg',
       },
+      {
+        id: 'laptops',
+        name: 'Laptops',
+        description: 'Portable computers for staff who work away from a desk.',
+        image: '/assets/products/laptops/laptop-computer.jpg',
+        imageAlt: 'A laptop computer',
+      },
     ],
   },
   {
@@ -110,8 +124,8 @@ export const equipmentGroups: EquipmentGroup[] = [
   },
   {
     id: 'power',
-    title: 'Power continuity',
-    description: 'Backup power equipment for when the mains supply is unavailable.',
+    title: 'Power & solar',
+    description: 'Solar, inverter, battery, UPS and voltage-protection equipment.',
     categories: [
       {
         id: 'inverters',
@@ -126,6 +140,29 @@ export const equipmentGroups: EquipmentGroup[] = [
         name: 'Batteries',
         description: 'Batteries that store power for use when the mains supply is unavailable.',
         image: '/assets/products/batteries/battery-power-storage.jpg',
+      },
+      {
+        id: 'solar-panels',
+        name: 'Solar panels',
+        description: 'Panels that generate electricity from sunlight for on-site power.',
+        image: '/assets/products/solar-panels/solar-panel-array.jpg',
+        imageAlt: 'Solar panels',
+      },
+      {
+        id: 'ups-systems',
+        name: 'UPS systems',
+        description:
+          'Uninterruptible power supplies that keep equipment running through a mains interruption, including industrial, online and line-interactive units.',
+        image: '/assets/products/ups-systems/ups-power-cabinet.jpg',
+        imageAlt: 'Power backup equipment',
+      },
+      {
+        id: 'avr-stabilizers',
+        name: 'AVR stabilizers',
+        description:
+          'Automatic voltage regulators that steady the supply reaching connected equipment.',
+        image: '/assets/products/avr-stabilizers/avr-power-protector.jpg',
+        imageAlt: 'Power-protection equipment',
       },
     ],
   },

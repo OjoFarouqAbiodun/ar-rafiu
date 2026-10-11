@@ -1,5 +1,7 @@
 /**
- * Service list, taken from the set named in PRD section 9.3.
+ * Service list. It combines the services named in PRD section 9.3, which says
+ * this list is to be updated when the company provides its official set, with
+ * the areas the company confirmed in 2026.
  *
  * Summaries describe what a service is rather than what the company achieves
  * with it, so no capability or performance claim is implied (PRD section 24).
@@ -16,6 +18,13 @@ export interface Service {
   description: string;
   /** Optional until official photography exists (PRD section 27.10). */
   image?: string;
+  /**
+   * Optional alt text describing what the photograph shows. Unset means the
+   * detail page falls back to the item name, which is the pre-existing
+   * behaviour. Set for entries whose photograph is representative stock, so the
+   * alt describes the visible subject rather than naming the page.
+   */
+  imageAlt?: string;
   /** Optional. Only factual, company-supplied inclusions or capabilities. */
   features?: readonly string[];
   /** Optional. Only factual, company-supplied use cases. */
@@ -31,15 +40,10 @@ export interface Service {
 
 export const services: Service[] = [
   {
-    id: 'installation',
-    name: 'IT equipment installation',
-    description: 'Setting up and connecting IT equipment so it is ready to use.',
-    image: '/assets/services/technician-installing-network-equipment.jpg',
-  },
-  {
-    id: 'maintenance',
-    name: 'Equipment maintenance',
-    description: 'Maintenance carried out on equipment to keep it working reliably.',
+    id: 'general-installation',
+    name: 'General installation & maintenance',
+    description:
+      'Installation and maintenance work for the equipment Ar-Rafiu supplies, and for equipment already in use.',
     image: '/assets/services/it-maintenance-technician.jpg',
   },
   {
@@ -56,9 +60,18 @@ export const services: Service[] = [
   },
   {
     id: 'cctv-installation',
-    name: 'CCTV installation',
-    description: 'Fitting and connecting camera systems, and setting them up for the area being monitored.',
+    name: 'CCTV installation & maintenance',
+    description:
+      'Fitting and connecting camera systems, setting them up for the area being monitored, and keeping them maintained.',
     image: '/assets/services/cctv-camera-installation.jpg',
+  },
+  {
+    id: 'solar-installation',
+    name: 'Solar & hybrid solar installation & management',
+    description:
+      'Installing solar and hybrid solar systems, and managing them as part of the power setup.',
+    image: '/assets/services/solar-panel-installation.jpg',
+    imageAlt: 'Technicians installing solar panels on a roof',
   },
   {
     id: 'biometric-installation',
@@ -67,6 +80,13 @@ export const services: Service[] = [
     image: '/assets/services/biometric-access-terminal.jpg',
     metaDescription:
       'Biometric system installation from Ar-Rafiu: fitting fingerprint readers and other biometric devices and setting them up for access control.',
+  },
+  {
+    id: 'networking-solutions',
+    name: 'Networking solutions',
+    description:
+      'Setting up and connecting computer networks and the equipment that runs on them.',
+    image: '/assets/services/technician-installing-network-equipment.jpg',
   },
   {
     id: 'server-solutions',
@@ -81,12 +101,59 @@ export const services: Service[] = [
     image: '/assets/services/it-support-helpdesk.jpg',
   },
   {
+    id: 'hardware-software-engineering',
+    name: 'Hardware & software engineering',
+    description:
+      'Hardware and software engineering work, from working out what a requirement needs to setting it up.',
+    image: '/assets/services/circuit-board-electronics.jpg',
+    imageAlt: 'Electronic components on a circuit board',
+  },
+  {
     id: 'software-solutions',
     name: 'Software & application solutions',
     description: 'Software and applications. State the requirement when you enquire and it can be matched.',
     image: '/assets/services/business-software-on-screen.jpg',
     metaDescription:
       'Software and application solutions from Ar-Rafiu Integrated Services Limited. Describe the requirement when you enquire and it can be matched to it.',
+  },
+  {
+    id: 'web-design',
+    name: 'Web design',
+    description:
+      'Designing and building websites, from the first layout through to the finished pages.',
+    image: '/assets/services/web-design-screen.jpg',
+    imageAlt: 'A computer screen showing web design work',
+  },
+  {
+    id: 'laptop-desktop',
+    name: 'Laptop & desktop supply, services & maintenance',
+    description:
+      'Supplying laptops and desktop computers, and servicing or maintaining the ones already in use.',
+    image: '/assets/services/technician-repairing-laptop.jpg',
+    imageAlt: 'A technician servicing a laptop',
+  },
+  {
+    id: 'solar-panel-inverter-supply',
+    name: 'Solar panel & inverter supply',
+    description: 'Supplying solar panels and inverters for on-site power.',
+    image: '/assets/services/residential-solar-inverter.jpg',
+    imageAlt: 'An installed solar inverter setup',
+  },
+  {
+    id: 'ups-solutions',
+    name: 'UPS solutions',
+    description:
+      'Uninterruptible power supplies, including industrial, online and line-interactive units, supplied and set up.',
+    image: '/assets/services/ups-battery-unit.jpg',
+    imageAlt: 'Battery backup or uninterruptible power supply equipment',
+  },
+  {
+    id: 'avr-stabilizers',
+    name: 'AVR stabilizers',
+    description:
+      'Automatic voltage regulators that steady the supply reaching connected equipment.',
+    image: '/assets/services/voltage-regulation-equipment.jpg',
+    imageAlt: 'Voltage regulation or power supply equipment',
   },
   {
     id: 'power-backup',

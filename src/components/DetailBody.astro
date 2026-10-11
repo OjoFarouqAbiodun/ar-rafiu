@@ -31,6 +31,11 @@ interface Props {
   context?: DetailContext;
   /** Set once official photography exists (PRD section 27.10). */
   image?: string;
+  /**
+   * Optional alt text describing the photograph. Unset means the item name is
+   * used, which preserves the previous behaviour for entries without one.
+   */
+  imageAlt?: string;
   features?: readonly string[];
   useCases?: readonly string[];
   /** Labelled detail lines for the WhatsApp message, e.g. `{ Product: name }`. */
@@ -43,6 +48,7 @@ const {
   name,
   context,
   image,
+  imageAlt,
   features = [],
   useCases = [],
   enquiry,
@@ -72,7 +78,7 @@ const hasDetailData = hasFeatures || hasUseCases;
         <img
           class="detail__image"
           src={image}
-          alt={name}
+          alt={imageAlt ?? name}
           loading="lazy"
           decoding="async"
         />
