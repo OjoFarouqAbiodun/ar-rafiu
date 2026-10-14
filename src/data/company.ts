@@ -4,13 +4,15 @@
  * Every enquiry button, footer, and contact link reads from this module, so a
  * change is a one-line edit (PRD section 11). These are the confirmed details
  * supplied by the company. Fields the company has not supplied — history,
- * certifications, registration numbers, partners, social accounts — are left
- * out rather than filled with placeholders (PRD sections 24 and 25).
+ * certifications, partners, social accounts — are left out rather than filled
+ * with placeholders (PRD sections 24 and 25).
  */
 
 export const company = {
   legalName: 'Ar-Rafiu Integrated Services Limited',
   tradingName: 'Ar-Rafiu Integrated Services',
+  /** CAC registration number, confirmed from the CAC certificate. */
+  cacRegistrationNumber: 'RC 8059744',
   contact: {
     /** WhatsApp number in international format, without "+", for wa.me links. */
     whatsapp: '2349067421693',

@@ -7,10 +7,9 @@ export default defineConfig({
   // between inline elements. These templates are hand-authored and rely on
   // whitespace-aware collapsing, so the previous behaviour is kept.
   compressHTML: true,
-  // Site URL is intentionally not set because no custom domain is confirmed yet.
-  // When the real domain is purchased, set `site` here (e.g. https://example.com)
-  // and the sitemap + canonical URLs will use it automatically.
-  site: undefined,
+  // Confirmed production origin. The sitemap and canonical URLs use it
+  // automatically.
+  site: 'https://ar-rafiu.vercel.app',
   integrations: [
     sitemap({
       filter: (page) => !page.endsWith('/404.html') && !page.endsWith('/404/'),

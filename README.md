@@ -6,7 +6,8 @@ and replacement services it provides.
 
 **Status:** V1. The contact details are the confirmed ones supplied by the
 company; product and service imagery is representative stock photography (see
-Product and service imagery below), and no production domain has been set.
+Product and service imagery below), and the production origin is confirmed as
+`https://ar-rafiu.vercel.app`.
 
 Visitors reach the company through WhatsApp, so every product, service and
 contact path leads to a pre-filled WhatsApp enquiry.
@@ -94,9 +95,9 @@ header, footer, contact page and enquiry form — because the pages read from
 this file rather than repeating the values.
 
 Details the company has not supplied (history, founding year, certifications,
-registration numbers, partners, social accounts) are deliberately absent
-rather than filled in. Add them to the same file and the relevant page once
-the company provides them.
+partners, social accounts) are deliberately absent rather than filled in. Add
+them to the same file and the relevant page once the company provides them.
+The CAC registration number is confirmed and is shown in the footer.
 
 ## Brand assets
 
@@ -200,12 +201,9 @@ script — run the harness directly with `node` as shown.
 `npm run build` produces a self-contained `dist/` directory of static files.
 Deploy it to any static host. No application server is required.
 
-The production domain has not been confirmed. Once it is, complete the
-following in `astro.config.mjs` and the site metadata:
+The production origin is confirmed as `https://ar-rafiu.vercel.app`, and
+Astro's `site` option in `astro.config.mjs` is set to it. Canonical URLs are
+generated from that origin, and `npm run build` writes `dist/sitemap-index.xml`
+and `dist/sitemap-0.xml`, which `public/robots.txt` references.
 
-- Set Astro's `site` option to the production origin.
-- Add canonical URLs, `og:url` and the Open Graph image.
-- Add a sitemap, and reference it from `public/robots.txt`.
-
-Until the domain exists, those URL-dependent values are deliberately omitted
-rather than guessed.
+Still to add: `og:url` and the Open Graph image.

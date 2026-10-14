@@ -3,9 +3,10 @@ import { company } from '../data/company';
 /**
  * Page metadata builder.
  *
- * Canonical URLs and `og:image` are deliberately absent. Both require an
- * absolute origin, and the deployment domain is not yet known (PRD section 32,
- * phase 8). They are added when `site` is configured rather than guessed now.
+ * Builds the title, description, Open Graph and Twitter tags. Canonical URLs
+ * are generated separately in `src/layouts/BaseLayout.astro` from Astro's
+ * confirmed `site` origin. The Open Graph image is still to be added when an
+ * asset exists rather than guessed.
  */
 
 export interface PageMeta {
@@ -51,8 +52,8 @@ export function buildPageMeta({ title, description }: PageMeta): ResolvedPageMet
 }
 
 export function getCanonicalUrl(path: string): string | undefined {
-  // Return undefined if site URL is not configured (no domain decided yet).
-  // When site is set in astro.config.mjs, Astro's sitemap and layouts can use this.
+  // Returns undefined if Astro's `site` is not configured. `site` is set in
+  // astro.config.mjs, so this resolves against the confirmed production origin.
   const site = (import.meta as any).env?.SITE;
   if (!site) return undefined;
   const base = String(site).replace(/\/$/, '');
