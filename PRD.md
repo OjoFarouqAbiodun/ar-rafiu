@@ -464,17 +464,7 @@ The website must provide a direct WhatsApp enquiry mechanism.
 
 The initial implementation should use a **pre-filled WhatsApp message**.
 
-The exact company WhatsApp number is currently unavailable and will temporarily use placeholder data.
-
-Example placeholder:
-
-```text
-2348000000000
-```
-
-This MUST be treated as temporary information.
-
-The actual WhatsApp number will be replaced when supplied by the company.
+The company's WhatsApp number has been supplied and is stored centrally in `src/data/company.ts`. Every enquiry button and link reads from that source (see Important Implementation Requirement below). No placeholder number is in use.
 
 ---
 
@@ -839,27 +829,11 @@ or clearly marked temporary placeholder content.
 
 Until the company provides official information, temporary values may be used for development.
 
-Examples:
+The company's contact details are now confirmed and centralized in `src/data/company.ts`: the WhatsApp number, phone number, email address, address, business hours and service area. The placeholder contact examples previously shown in this section are no longer used.
 
-```text
-Phone:
-+234 800 000 0000
+Any remaining placeholder information MUST be centralized so it can be replaced easily.
 
-WhatsApp:
-+234 800 000 0000
-
-Email:
-info@example.com
-
-Address:
-Lagos, Nigeria
-```
-
-These values are development placeholders only.
-
-They MUST be centralized so they can be replaced easily.
-
-Before production deployment, all placeholder company information must be replaced or removed.
+Before production deployment, all remaining placeholder company information must be replaced or removed.
 
 ---
 
@@ -1377,9 +1351,9 @@ Test:
 
 Before deployment:
 
-* Remove placeholder information.
-* Confirm company contact information.
-* Confirm WhatsApp number.
+* Remove placeholder information. Company contact details and the WhatsApp number are now confirmed in `src/data/company.ts`; any other remaining placeholders still need review and removal before launch.
+* Confirm company contact information. Confirmed and centralized in `src/data/company.ts`.
+* Confirm WhatsApp number. Confirmed and centralized in `src/data/company.ts`.
 * Confirm official logo.
 * Confirm company address.
 * Confirm email.

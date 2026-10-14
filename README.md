@@ -60,7 +60,7 @@ src/
                   products/[category].astro and services/[service].astro.
   components/     Astro components. home/ holds the homepage sections.
   data/           Structured content: company.ts, equipment.ts, services.ts,
-                  enquiry.ts (homepage process steps), navigation.ts.
+                  enquiry.ts (homepage enquiry topics), navigation.ts.
   lib/            Pure TypeScript helpers: whatsapp.ts builds every enquiry
                   URL, seo.ts builds page metadata.
   scripts/        site.ts — the only client script. Navigation and the
@@ -135,7 +135,7 @@ a photograph is a human step: review candidates against the entry's `subject`,
 then record the direct image URL in `imageUrl` and the photographer and photo
 page in `attribution`.
 
-Download the planned files with:
+Download the files with:
 
 ```bash
 node scripts/download-images.mjs
