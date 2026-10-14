@@ -5,8 +5,8 @@ equipment and technology it supplies and the installation, maintenance, repair
 and replacement services it provides.
 
 **Status:** V1. The contact details are the confirmed ones supplied by the
-company; product and service imagery is still placeholder, and no production
-domain has been set.
+company; product and service imagery is representative stock photography (see
+Product and service imagery below), and no production domain has been set.
 
 Visitors reach the company through WhatsApp, so every product, service and
 contact path leads to a pre-filled WhatsApp enquiry.
@@ -69,7 +69,7 @@ src/
 public/           Files copied verbatim, including robots.txt and assets/.
 scripts/
   verify.mjs          Automated verification harness. See Verification below.
-  image-manifest.json The planned photography: one entry per image slot.
+  image-manifest.json The representative photography: one entry per image slot.
   download-images.mjs Downloads the manifest entries. See Product and
                       service imagery below.
 ```
@@ -113,25 +113,27 @@ These are the supplied brand assets and are used as-is. Do not recolour,
 redraw, crop or otherwise restyle them; change the surrounding layout instead.
 Site colours are defined as tokens in `src/styles/tokens.css`.
 
-Product and service imagery is not supplied yet, so those pages show a
-labelled placeholder (`src/components/PlaceholderMedia.astro`). Replace those
-with official photography once it exists — do not fill them with stock or
-generated imagery presented as the company's own. The plan for representative
-imagery in the meantime is described under Product and service imagery below.
+Product and service imagery is representative stock photography installed from
+the manifest described under Product and service imagery below; the labelled
+placeholder (`src/components/PlaceholderMedia.astro`) remains as the fallback
+for any slot without an image. Replace the imagery with official photography
+once it exists — do not present stock or generated imagery as the company's
+own.
 
 ## Product and service imagery
 
-The photographs each page needs are planned in one file:
+The photographs each page needs are recorded in one file:
 
 ```text
 scripts/image-manifest.json
 ```
 
-Each entry names the slot (`id`), where the file will live (`target`, a path
-under `public/`), what the photograph must show (`subject`), and a search page
-on the source platform (`sourceUrl`). Selecting the photograph is a human
-step: review candidates against the entry's `subject`, then record the direct
-image URL in `imageUrl` and the photographer and photo page in `attribution`.
+Each entry names the slot (`id`), where the file lives (`target`, a path under
+`public/`), what the photograph must show (`subject`), and a search page on the
+source platform (`sourceUrl`). All 33 entries are currently installed. Selecting
+a photograph is a human step: review candidates against the entry's `subject`,
+then record the direct image URL in `imageUrl` and the photographer and photo
+page in `attribution`.
 
 Download the planned files with:
 
