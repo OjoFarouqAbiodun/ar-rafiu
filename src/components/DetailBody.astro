@@ -87,6 +87,7 @@ const hasDetailData = hasFeatures || hasUseCases;
           alt={imageAlt ?? name}
           loading="eager"
           decoding="async"
+          fetchpriority="high"
         />
       ) : (
         <PlaceholderMedia label={name} ratio="4 / 3" />
