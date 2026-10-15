@@ -67,7 +67,10 @@ src/
   scripts/        site.ts — the only client script. Navigation and the
                   enquiry form. Each feature initialises independently.
   styles/         fonts.css, tokens.css (design tokens), base.css.
-public/           Files copied verbatim, including robots.txt and assets/.
+  assets/         Photographic sources (products/, services/, images/).
+                  Imported by src/data so Astro optimises them at build.
+public/           Files copied verbatim, including robots.txt, brand
+                  assets and favicons.
 scripts/
   verify.mjs          Automated verification harness. See Verification below.
   image-manifest.json The representative photography: one entry per image slot.
@@ -129,12 +132,13 @@ The photographs each page needs are recorded in one file:
 scripts/image-manifest.json
 ```
 
-Each entry names the slot (`id`), where the file lives (`target`, a path under
-`public/`), what the photograph must show (`subject`), and a search page on the
-source platform (`sourceUrl`). All 33 entries are currently installed. Selecting
-a photograph is a human step: review candidates against the entry's `subject`,
-then record the direct image URL in `imageUrl` and the photographer and photo
-page in `attribution`.
+Each entry names the slot (`id`), where the file lives (`target`, a site path
+resolved under `src/`, so `/assets/...` is written to `src/assets/...`), what the
+photograph must show (`subject`), and a search page on the source platform
+(`sourceUrl`). All 33 entries are currently installed. Selecting a photograph is
+a human step: review candidates against the entry's `subject`, then record the
+direct image URL in `imageUrl` and the photographer and photo page in
+`attribution`.
 
 Download the files with:
 

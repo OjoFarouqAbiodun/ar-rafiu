@@ -147,7 +147,7 @@ const pending = [];
 const failed = [];
 
 for (const entry of entries) {
-  const diskPath = join(ROOT, 'public', entry.target.slice(1));
+  const diskPath = join(ROOT, 'src', entry.target.slice(1));
 
   if (existsSync(diskPath)) {
     if (!force) {

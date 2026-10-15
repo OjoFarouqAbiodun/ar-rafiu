@@ -1,6 +1,7 @@
 ---
+import { Picture } from 'astro:assets';
+import homepageEquipment from '../../assets/images/homepage-server-it-equipment.jpg';
 import EquipmentCatalogue from '../EquipmentCatalogue.astro';
-
 import ActionLink from '../ActionLink.astro';
 
 /**
@@ -22,9 +23,13 @@ import ActionLink from '../ActionLink.astro';
       </p>
 
       <div class="equipment__media">
-        <img
+        <Picture
+          src={homepageEquipment}
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          widths={[352, 704, 1056]}
+          sizes="(min-width:24rem) 22rem, calc(100vw - 2.5rem)"
           class="equipment__image"
-          src="/assets/images/homepage-server-it-equipment.jpg"
           alt="Server and IT equipment"
           loading="lazy"
           decoding="async"

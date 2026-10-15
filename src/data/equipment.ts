@@ -1,3 +1,18 @@
+import type { ImageMetadata } from 'astro';
+import serverRackDataCenterImg from '../assets/products/servers/server-rack-data-center.jpg';
+import serverEquipmentRackImg from '../assets/products/server-racks/server-equipment-rack.jpg';
+import desktopComputerWorkstationImg from '../assets/products/computers/desktop-computer-workstation.jpg';
+import laptopComputerImg from '../assets/products/laptops/laptop-computer.jpg';
+import printerBusinessOfficeImg from '../assets/products/printers/printer-business-office.jpg';
+import officePhotocopierImg from '../assets/products/photocopiers/office-photocopier.jpg';
+import cctvSecurityCameraImg from '../assets/products/cctv-systems/cctv-security-camera.jpg';
+import biometricFingerprintScannerImg from '../assets/products/biometric-machines/biometric-fingerprint-scanner.jpg';
+import powerInverterUnitImg from '../assets/products/inverters/power-inverter-unit.jpg';
+import batteryPowerStorageImg from '../assets/products/batteries/battery-power-storage.jpg';
+import solarPanelArrayImg from '../assets/products/solar-panels/solar-panel-array.jpg';
+import upsPowerCabinetImg from '../assets/products/ups-systems/ups-power-cabinet.jpg';
+import avrPowerProtectorImg from '../assets/products/avr-stabilizers/avr-power-protector.jpg';
+import businessSoftwareComputerScreenImg from '../assets/products/applications/business-software-computer-screen.jpg';
 /**
  * Equipment catalogue, grouped by what the equipment is for rather than by
  * alphabetical order.
@@ -23,7 +38,7 @@ export interface EquipmentCategory {
   name: string;
   description: string;
   /** Optional until official product photography exists (PRD section 27.10). */
-  image?: string;
+  image?: ImageMetadata;
   /**
    * Optional alt text describing what the photograph shows. Unset means the
    * detail page falls back to the item name, which is the pre-existing
@@ -61,25 +76,25 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'servers',
         name: 'Servers',
         description: 'Server hardware for shared services and business workloads.',
-        image: '/assets/products/servers/server-rack-data-center.jpg',
+        image: serverRackDataCenterImg,
       },
       {
         id: 'server-racks',
         name: 'Server racks',
         description: 'Racks for housing, organising and protecting server equipment.',
-        image: '/assets/products/server-racks/server-equipment-rack.jpg',
+        image: serverEquipmentRackImg,
       },
       {
         id: 'computers',
         name: 'Computers',
         description: 'Desktop and workstation computers for staff use.',
-        image: '/assets/products/computers/desktop-computer-workstation.jpg',
+        image: desktopComputerWorkstationImg,
       },
       {
         id: 'laptops',
         name: 'Laptops',
         description: 'Portable computers for staff who work away from a desk.',
-        image: '/assets/products/laptops/laptop-computer.jpg',
+        image: laptopComputerImg,
         imageAlt: 'A laptop computer',
       },
     ],
@@ -93,13 +108,13 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'printers',
         name: 'Printers',
         description: 'Printers for everyday documents, from occasional pages to shared office print runs.',
-        image: '/assets/products/printers/printer-business-office.jpg',
+        image: printerBusinessOfficeImg,
       },
       {
         id: 'photocopiers',
         name: 'Photocopiers',
         description: 'Photocopy machines for higher-volume document work.',
-        image: '/assets/products/photocopiers/office-photocopier.jpg',
+        image: officePhotocopierImg,
       },
     ],
   },
@@ -112,13 +127,13 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'cctv-systems',
         name: 'CCTV systems',
         description: 'Closed-circuit camera systems for monitoring and security.',
-        image: '/assets/products/cctv-systems/cctv-security-camera.jpg',
+        image: cctvSecurityCameraImg,
       },
       {
         id: 'biometric-machines',
         name: 'Biometric machines',
         description: 'Biometric devices for identification and access control.',
-        image: '/assets/products/biometric-machines/biometric-fingerprint-scanner.jpg',
+        image: biometricFingerprintScannerImg,
       },
     ],
   },
@@ -131,7 +146,7 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'inverters',
         name: 'Inverters',
         description: 'Inverters that turn stored battery power into mains electricity for equipment that needs a normal supply.',
-        image: '/assets/products/inverters/power-inverter-unit.jpg',
+        image: powerInverterUnitImg,
         metaDescription:
           'Inverters supplied by Ar-Rafiu Integrated Services Limited, turning stored battery power into mains electricity for equipment that needs a normal supply.',
       },
@@ -139,13 +154,13 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'batteries',
         name: 'Batteries',
         description: 'Batteries that store power for use when the mains supply is unavailable.',
-        image: '/assets/products/batteries/battery-power-storage.jpg',
+        image: batteryPowerStorageImg,
       },
       {
         id: 'solar-panels',
         name: 'Solar panels',
         description: 'Panels that generate electricity from sunlight for on-site power.',
-        image: '/assets/products/solar-panels/solar-panel-array.jpg',
+        image: solarPanelArrayImg,
         imageAlt: 'Solar panels',
       },
       {
@@ -153,7 +168,7 @@ export const equipmentGroups: EquipmentGroup[] = [
         name: 'UPS systems',
         description:
           'Uninterruptible power supplies that keep equipment running through a mains interruption, including industrial, online and line-interactive units.',
-        image: '/assets/products/ups-systems/ups-power-cabinet.jpg',
+        image: upsPowerCabinetImg,
         imageAlt: 'Power backup equipment',
       },
       {
@@ -161,7 +176,7 @@ export const equipmentGroups: EquipmentGroup[] = [
         name: 'AVR stabilizers',
         description:
           'Automatic voltage regulators that steady the supply reaching connected equipment.',
-        image: '/assets/products/avr-stabilizers/avr-power-protector.jpg',
+        image: avrPowerProtectorImg,
         imageAlt: 'Power-protection equipment',
       },
     ],
@@ -175,7 +190,7 @@ export const equipmentGroups: EquipmentGroup[] = [
         id: 'applications',
         name: 'Applications',
         description: 'Business software and applications used for everyday organisational work.',
-        image: '/assets/products/applications/business-software-computer-screen.jpg',
+        image: businessSoftwareComputerScreenImg,
       },
     ],
   },

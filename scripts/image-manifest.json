@@ -1,5 +1,5 @@
 {
-  "_about": "Representative imagery for the Ar-Rafiu website (PRD sections 26 and 27). This file is the source of truth for scripts/download-images.mjs. All 33 entries are installed: every target exists under public/ and every 'image' is referenced from src/data. To install or replace an image: open sourceUrl, pick a photo whose subject matches the 'subject' field, copy its direct image URL (images.pexels.com or images.unsplash.com CDN) into 'imageUrl', record the photographer and photo-page URL in 'attribution', then run: node scripts/download-images.mjs",
+  "_about": "Representative imagery for the Ar-Rafiu website (PRD sections 26 and 27). This file is the source of truth for scripts/download-images.mjs. All 33 entries are installed: every target exists under src/assets/ and every 'image' is imported from src/data. To install or replace an image: open sourceUrl, pick a photo whose subject matches the 'subject' field, copy its direct image URL (images.pexels.com or images.unsplash.com CDN) into 'imageUrl', record the photographer and photo-page URL in 'attribution', then run: node scripts/download-images.mjs",
   "entries": [
     {
       "id": "servers",
