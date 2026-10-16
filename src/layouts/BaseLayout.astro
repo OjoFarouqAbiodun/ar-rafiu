@@ -19,7 +19,7 @@ interface Props extends PageMeta {}
 const { title, description } = Astro.props;
 const canonicalUrl = Astro.site ? new URL(Astro.url.pathname + Astro.url.search, Astro.site).toString() : '';
 const canonical = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
-const ogImageUrl = Astro.site ? new URL('/assets/brand/social-share.png', Astro.site).toString() : undefined;
+const ogImageUrl = Astro.site ? new URL('/assets/brand/social-share-2.png', Astro.site).toString() : undefined;
 const meta = buildPageMeta({
   title,
   description,

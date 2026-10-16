@@ -152,7 +152,7 @@ ${categories}
   <text x="${CONTENT_RIGHT}" y="${FOOTER_BASELINE}" text-anchor="end" font-family="${FONT}" font-size="${FOOTER.siteSize}" fill="${COLOR.white}">${escapeXml(FOOTER.site)}</text>
 </svg>`;
 
-const outPath = resolve(root, 'public/assets/brand/social-share.png');
+const outPath = resolve(root, 'public/assets/brand/social-share-2.png');
 
 await sharp(Buffer.from(svg)).png().resize(WIDTH, HEIGHT, { fit: 'cover' }).toFile(outPath);
 
