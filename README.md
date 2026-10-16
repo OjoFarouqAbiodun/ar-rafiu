@@ -210,4 +210,4 @@ Astro's `site` option in `astro.config.mjs` is set to it. Canonical URLs are
 generated from that origin, and `npm run build` writes `dist/sitemap-index.xml`
 and `dist/sitemap-0.xml`, which `public/robots.txt` references.
 
-Still to add: `og:url` and the Open Graph image.
+Social sharing preview: Open Graph (`og:image`, `og:url`, `og:image:*`) and Twitter (`twitter:card=summary_large_image`, `twitter:image`) are configured. The share image is generated from `scripts/generate-social-image.mjs` and served from `public/assets/brand/social-share.png` (1200 × 630).

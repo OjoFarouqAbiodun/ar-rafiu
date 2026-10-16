@@ -23,15 +23,37 @@ export interface ResolvedPageMeta {
     description: string;
     siteName: string;
     type: 'website';
+    url?: string;
+    image?: {
+      url: string;
+      secureUrl?: string;
+      type?: string;
+      width?: number;
+      height?: number;
+      alt?: string;
+    };
   };
   twitter: {
-    card: 'summary';
+    card: 'summary' | 'summary_large_image';
     title: string;
     description: string;
+    image?: string;
   };
 }
 
-export function buildPageMeta({ title, description }: PageMeta): ResolvedPageMeta {
+export interface BuildPageMetaOptions extends PageMeta {
+  /** Absolute URL to the Open Graph/Twitter share image. */
+  imageUrl?: string;
+  /** Absolute URL of the page (canonical/og:url). */
+  url?: string;
+}
+
+export function buildPageMeta({
+  title,
+  description,
+  imageUrl,
+  url,
+}: BuildPageMetaOptions): ResolvedPageMeta {
   const fullTitle = title === company.legalName ? title : `${title} | ${company.tradingName}`;
 
   return {
@@ -42,11 +64,25 @@ export function buildPageMeta({ title, description }: PageMeta): ResolvedPageMet
       description,
       siteName: company.tradingName,
       type: 'website',
+      ...(url ? { url } : {}),
+      ...(imageUrl
+        ? {
+            image: {
+              url: imageUrl,
+              secureUrl: imageUrl,
+              type: 'image/png',
+              width: 1200,
+              height: 630,
+              alt: `${company.tradingName} — IT equipment, technology and technical support`,
+            },
+          }
+        : {}),
     },
     twitter: {
-      card: 'summary',
+      card: imageUrl ? 'summary_large_image' : 'summary',
       title: fullTitle,
       description,
+      ...(imageUrl ? { image: imageUrl } : {}),
     },
   };
 }

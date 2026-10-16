@@ -17,7 +17,15 @@ import { buildPageMeta, type PageMeta } from '../lib/seo';
 interface Props extends PageMeta {}
 
 const { title, description } = Astro.props;
-const meta = buildPageMeta({ title, description });
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname + Astro.url.search, Astro.site).toString() : '';
+const canonical = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
+const ogImageUrl = Astro.site ? new URL('/assets/brand/social-share.png', Astro.site).toString() : undefined;
+const meta = buildPageMeta({
+  title,
+  description,
+  imageUrl: ogImageUrl,
+  url: canonical,
+});
 ---
 
 <!doctype html>
@@ -29,19 +37,30 @@ const meta = buildPageMeta({ title, description });
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
 
+    <link rel="canonical" href={canonical} />
+
     <meta property="og:type" content={meta.openGraph.type} />
     <meta property="og:site_name" content={meta.openGraph.siteName} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={meta.openGraph.title} />
     <meta property="og:description" content={meta.openGraph.description} />
-    <meta name="twitter:card" content={meta.twitter.card} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ar-Rafiu Integrated Services — IT equipment, technology and technical support" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
     <meta name="twitter:title" content={meta.twitter.title} />
     <meta name="twitter:description" content={meta.twitter.description} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <meta name="theme-color" content="#010067" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    {import.meta.env.SITE && <link rel="canonical" href={new URL(Astro.url.pathname + Astro.url.search, import.meta.env.SITE).toString()} />}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
