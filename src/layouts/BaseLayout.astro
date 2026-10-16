@@ -41,21 +41,27 @@ const meta = buildPageMeta({
 
     <meta property="og:type" content={meta.openGraph.type} />
     <meta property="og:site_name" content={meta.openGraph.siteName} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:url" content={meta.openGraph.url} />
     <meta property="og:title" content={meta.openGraph.title} />
     <meta property="og:description" content={meta.openGraph.description} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:secure_url" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ar-Rafiu Integrated Services — IT equipment, technology and technical support" />
+    {
+      meta.openGraph.image && (
+        <>
+          <meta property="og:image" content={meta.openGraph.image.url} />
+          <meta property="og:image:secure_url" content={meta.openGraph.image.secureUrl} />
+          <meta property="og:image:type" content={meta.openGraph.image.type} />
+          <meta property="og:image:width" content={String(meta.openGraph.image.width)} />
+          <meta property="og:image:height" content={String(meta.openGraph.image.height)} />
+          <meta property="og:image:alt" content={meta.openGraph.image.alt} />
+        </>
+      )
+    }
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:card" content={meta.twitter.card} />
+    <meta name="twitter:url" content={meta.openGraph.url} />
     <meta name="twitter:title" content={meta.twitter.title} />
     <meta name="twitter:description" content={meta.twitter.description} />
-    <meta name="twitter:image" content={ogImageUrl} />
+    {meta.twitter.image && <meta name="twitter:image" content={meta.twitter.image} />}
 
     <meta name="theme-color" content="#010067" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

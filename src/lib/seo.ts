@@ -3,10 +3,10 @@ import { company } from '../data/company';
 /**
  * Page metadata builder.
  *
- * Builds the title, description, Open Graph and Twitter tags. Canonical URLs
- * are generated separately in `src/layouts/BaseLayout.astro` from Astro's
- * confirmed `site` origin. The Open Graph image is still to be added when an
- * asset exists rather than guessed.
+ * Builds the title, description, Open Graph and Twitter values. The canonical
+ * URL and the share-image URL are resolved in `src/layouts/BaseLayout.astro`
+ * from Astro's confirmed `site` origin and passed in, so this module stays
+ * free of environment-specific URLs.
  */
 
 export interface PageMeta {
