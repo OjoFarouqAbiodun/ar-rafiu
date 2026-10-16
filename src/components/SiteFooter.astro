@@ -71,7 +71,9 @@ const chatHref = buildWhatsAppChatLink();
 
   <div class="container site-footer__legal">
     <p>&copy; {year} {company.legalName}</p>
-    <p>CAC Registration No. {company.cacRegistrationNumber}</p>
+    <p class="site-footer__registration">
+      CAC Registration No. {company.cacRegistrationNumber}
+    </p>
     <p class="site-footer__credit">
       Made with <span aria-hidden="true">❤️</span> by
       <a
@@ -156,19 +158,34 @@ const chatHref = buildWhatsAppChatLink();
     color: var(--color-text-muted);
   }
 
-  /* Left-aligned on mobile: the credit simply follows the copyright. An auto
-     margin is deliberately not applied here, because on a wrapped line by
-     itself it would absorb all the free space and push the credit to the right
-     edge, reading as a centred item. */
+  /* Left-aligned on mobile: the credit simply follows the copyright and the
+     registration notice. An auto margin is deliberately not applied here,
+     because on a wrapped line by itself it would absorb all the free space and
+     push the credit to the right edge, reading as a centred item. */
   .site-footer__credit {
     white-space: nowrap;
   }
 
-  /* Tablet and up: pushed to the far edge so the credit sits opposite the
-     copyright. */
+  /* Tablet and up: the copyright anchors the left and the credit the right. */
   @media (min-width: 48rem) {
     .site-footer__credit {
       margin-inline-start: auto;
+    }
+  }
+
+  /* Tablet tier only (matching the header's `--bp-lg` split): the three notices
+     cannot be relied on to share one row, so the registration is moved after
+     the credit and given a full line of its own, which puts the credit opposite
+     the copyright and the registration beneath the copyright. The markup keeps
+     its mobile order, so the reading order is unchanged on phones. */
+  @media (min-width: 48rem) and (max-width: 63.9375rem) {
+    .site-footer__credit {
+      order: 1;
+    }
+
+    .site-footer__registration {
+      order: 2;
+      flex-basis: 100%;
     }
   }
 
